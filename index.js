@@ -158,7 +158,7 @@ function multiplicador() {
             creditosValor += ganhoTotal;
             creditos.value = creditosValor;
             ganhos.value = ganhoTotal;
-            divResultado.innerHTML = "Parabéns! Você ganhou " + ganhoTotal + " créditos!";
+            divResultado.innerHTML = "Não contava com minha astusia! Você ganhou " + ganhoTotal + " créditos!";
             divResultado.classList = 'won';
 
             // Adiciona borda verde aos slots ganhadores
@@ -168,7 +168,7 @@ function multiplicador() {
             });
         } else {
             ganhos.value = 0;
-            divResultado.innerHTML = "( ' O ' )";
+            divResultado.innerHTML = "(Qué que foi, Qué que há!!! )";
             divResultado.classList = 'lost';
         }
 
