@@ -1,0 +1,206 @@
+/* Reset básico */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #1a1a1a, #333); /* Fundo gradiente escuro */
+    color: #fff;
+    overflow: auto; /* Permite rolagem se necessário */
+}
+
+/* Contêiner principal */
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('./images/tumblr_c2e8441ba9e6c32473da1b447b369b55_3f7ab16a_500.webp') no-repeat center center fixed; /* GIF de fundo */
+    background-size: cover;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Conteúdo do contêiner */
+.containerContents {
+    background: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente */
+    backdrop-filter: blur(10px); /* Efeito de desfoque */
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+/* Título do jogo */
+.title h2 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #ffcc00; /* Amarelo vibrante */
+    text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; /* Efeito de brilho */
+}
+
+/* Área de resultados */
+#results {
+    margin: 20px 0;
+    padding: 15px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    transition: background 0.3s ease;
+}
+
+#results.won {
+    background: #27ae60; /* Verde para vitória */
+    animation: pulse 0.5s ease;
+}
+
+#results.lost {
+    background: #c0392b; /* Vermelho para derrota */
+    animation: shake 0.5s ease;
+}
+
+/* Animação de pulso para vitória */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Animação de tremor para derrota */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+/* Área das imagens dos slots */
+.images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+/* Estilo para os slots */
+.slots {
+    width: 100px; /* Largura fixa para os slots */
+    height: 100px; /* Altura fixa para os slots */
+    object-fit: contain; /* Mantém a proporção da imagem sem cortar */
+    border: 2px solid #ffcc00; /* Borda amarela */
+    border-radius: 10px; /* Bordas arredondadas */
+    background-color: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efeito de transição */
+}
+
+/* Animação de rotação dos slots */
+@keyframes spin {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(360deg); }
+}
+
+.slots.rodando {
+    animation: spin 0.5s linear infinite;
+}
+
+/* Efeito de hover nos slots */
+.slots:hover {
+    transform: scale(1.1); /* Aumenta o tamanho do slot */
+    box-shadow: 0 0 15px #ffcc00; /* Efeito de brilho */
+}
+
+/* Estilo para os slots ganhadores */
+.slots.ganhou {
+    border: 4px solid #27ae60; /* Borda verde */
+    box-shadow: 0 0 15px #27ae60; /* Efeito de brilho */
+}
+
+/* Área de controle (créditos, aposta, ganhos, jogadas) */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.credits, .bet, .winnings, .plays {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.credits label, .bet label, .winnings label, .plays label {
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.credits input, .bet input, .winnings input, .plays input {
+    width: 60%;
+    padding: 5px;
+    text-align: right;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+}
+
+/* Botão de jogar */
+button {
+    margin: 20px 0;
+    padding: 15px 30px;
+    background: #ffcc00;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background: #ffdd33;
+    transform: translateY(-5px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Responsividade */
+@media screen and (max-width: 767.98px) {
+    .containerContents {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .slots {
+        width: 80px; /* Reduz o tamanho dos slots em dispositivos móveis */
+        height: 80px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .containerContents {
+        width: 500px;
+    }
+
+    .slots {
+        width: 100px; /* Mantém o tamanho padrão em telas maiores */
+        height: 100px;
+    }
+}

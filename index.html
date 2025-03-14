@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Caça-níquel</title>
+</head>
+<body>
+    <div class="container">
+        <div class="containerContents">
+            <!-- Título do jogo -->
+            <div class="title">
+                <h2>Pick Pock</h2>
+            </div>
+
+            <!-- Área de resultados -->
+            <div id="results">Jogar</div>
+
+            <!-- Área das imagens dos slots -->
+            <div class="images">
+                <img class="slots slot-1" src="./images/a001.jpg" alt="Slot 1">
+                <img class="slots slot-2" src="./images/a002.jpg" alt="Slot 2">
+                <img class="slots slot-3" src="./images/a003.jpg" alt="Slot 3">
+                <img class="slots slot-4" src="./images/a004.jpg" alt="Slot 4">
+                <img class="slots slot-5" src="./images/a005.jpg" alt="Slot 5">
+                <img class="slots slot-6" src="./images/a006.jpg" alt="Slot 6">
+                <img class="slots slot-7" src="./images/a007.jpg" alt="Slot 7">
+                <img class="slots slot-8" src="./images/a008.jpg" alt="Slot 8">
+                <img class="slots slot-9" src="./images/a009.jpg" alt="Slot 9">
+            </div>
+
+            <!-- Área de controle (créditos, aposta, ganhos, jogadas) -->
+            <div class="controls">
+                <div class="credits">
+                    <label for="creditos">Créditos: </label>
+                    <input type="number" id="creditos" value="100" readonly>
+                </div>
+                <div class="bet">
+                    <label for="aposta">Aposta: </label>
+                    <input type="number" id="aposta" value="1" min="1" max="10">
+                </div>
+                <div class="winnings">
+                    <label for="ganhos">Ganhos: </label>
+                    <input type="number" id="ganhos" value="0" readonly>
+                </div>
+                <div class="plays">
+                    <label for="jogadas">Jogadas: </label>
+                    <input type="number" id="jogadas" value="0" readonly>
+                </div>
+            </div>
+
+            <!-- Botão para jogar -->
+            <button type="button" id="botao" onclick="multiplicador();">Jogar</button>
+        </div>
+    </div>
+
+    <!-- Script do jogo -->
+    <script src="index.js"></script>
+</body>
+</html>
