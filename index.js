@@ -168,7 +168,7 @@ function multiplicador() {
             });
         } else {
             ganhos.value = 0;
-            divResultado.innerHTML = "(Qué que foi, Qué que há!!! )";
+            divResultado.innerHTML = "(Qué que foi, Qué que foi, Qué que há!!! )";
             divResultado.classList = 'lost';
         }
 
