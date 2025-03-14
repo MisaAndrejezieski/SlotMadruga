@@ -158,7 +158,7 @@ function multiplicador() {
             creditosValor += ganhoTotal;
             creditos.value = creditosValor;
             ganhos.value = ganhoTotal;
-            divResultado.innerHTML = "Não contava com minha astusia! Você ganhou " + ganhoTotal + " créditos!";
+            divResultado.innerHTML = "Não contava com minha astucia! Você ganhou " + ganhoTotal + " créditos!";
             divResultado.classList = 'won';
 
             // Adiciona borda verde aos slots ganhadores
