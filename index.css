@@ -80,7 +80,6 @@ html, body {
     color: var(--cor-texto);
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     transition: background 0.3s ease;
-    will-change: transform, background; /* Otimização para animações */
 }
 
 #results.won {
@@ -126,7 +125,6 @@ html, body {
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    will-change: transform, box-shadow; /* Otimização para animações */
 }
 
 /* Animação de rotação dos slots */
