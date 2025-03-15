@@ -50,12 +50,6 @@ html, body {
     text-align: center;
 }
 
-/* Efeito de desfoque (melhorado para performance) */
-@media (prefers-reduced-motion: no-preference) {
-    .containerContents {
-        backdrop-filter: blur(10px);
-    }
-}
 
 /* Título do jogo */
 .title h2 {
