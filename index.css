@@ -37,6 +37,12 @@ html, body {
     box-sizing: border-box;
 }
 
+@media screen and (max-width: 767.98px) {
+    .container {
+        background: var(--cor-fundo); /* Gradiente em dispositivos móveis */
+    }
+}
+
 /* Conteúdo do contêiner */
 .containerContents {
     background: rgba(0, 0, 0, 0.8);
@@ -50,6 +56,11 @@ html, body {
     text-align: center;
 }
 
+@media screen and (max-width: 767.98px) {
+    .containerContents {
+        max-width: 90%; /* Limita a largura em dispositivos móveis */
+    }
+}
 
 /* Título do jogo */
 .title h2 {
@@ -69,6 +80,7 @@ html, body {
     color: var(--cor-texto);
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     transition: background 0.3s ease;
+    will-change: transform, background; /* Otimização para animações */
 }
 
 #results.won {
@@ -114,6 +126,7 @@ html, body {
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform, box-shadow; /* Otimização para animações */
 }
 
 /* Animação de rotação dos slots */
@@ -127,7 +140,7 @@ html, body {
 }
 
 /* Efeito de hover nos slots */
-.slots:hover {
+.slots:hover, .slots:active {
     transform: scale(1.1);
     box-shadow: 0 0 15px var(--cor-destaque);
 }
@@ -219,5 +232,12 @@ button:active {
     .slots {
         width: var(--tamanho-slot);
         height: var(--tamanho-slot);
+    }
+}
+
+/* Suporte para prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .slots.rodando, #results.won, #results.lost {
+        animation: none;
     }
 }
