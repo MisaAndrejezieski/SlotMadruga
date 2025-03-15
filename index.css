@@ -1,12 +1,27 @@
+/* Variáveis CSS para cores e tamanhos */
+:root {
+    --cor-fundo: linear-gradient(135deg, #1a1a1a, #333);
+    --cor-texto: #fff;
+    --cor-destaque: #ffcc00;
+    --cor-vitoria: #27ae60;
+    --cor-derrota: #c0392b;
+    --cor-sombra: rgba(0, 0, 0, 0.5);
+    --cor-fundo-transparente: rgba(0, 0, 0, 0.8);
+    --tamanho-fonte-titulo: 2.5rem;
+    --tamanho-fonte-texto: 1.2rem;
+    --tamanho-slot: 100px;
+    --tamanho-slot-mobile: 80px;
+}
+
 /* Reset básico */
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: 'Roboto', 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, #1a1a1a, #333); /* Fundo gradiente escuro */
-    color: #fff;
-    overflow: auto; /* Permite rolagem se necessário */
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    overflow: auto;
 }
 
 /* Contêiner principal */
@@ -16,7 +31,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('/images/tumblr_c2e8441ba9e6c32473da1b447b369b55_3f7ab16a_500.webp') no-repeat center center fixed; /* GIF de fundo */
+    background: url('./images/tumblr_c2e8441ba9e6c32473da1b447b369b55_3f7ab16a_500.webp') no-repeat center center fixed;
     background-size: cover;
     padding: 20px;
     box-sizing: border-box;
@@ -24,43 +39,49 @@ html, body {
 
 /* Conteúdo do contêiner */
 .containerContents {
-    background: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente */
-    backdrop-filter: blur(10px); /* Efeito de desfoque */
+    background: var(--cor-fundo-transparente);
     width: 100%;
     max-width: 500px;
     padding: 20px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px var(--cor-sombra);
     text-align: center;
+}
+
+/* Efeito de desfoque (melhorado para performance) */
+@media (prefers-reduced-motion: no-preference) {
+    .containerContents {
+        backdrop-filter: blur(10px);
+    }
 }
 
 /* Título do jogo */
 .title h2 {
-    font-size: 2.5rem;
+    font-size: var(--tamanho-fonte-titulo);
     margin: 0;
-    color: #ffcc00; /* Amarelo vibrante */
-    text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; /* Efeito de brilho */
+    color: var(--cor-destaque);
+    text-shadow: 0 0 10px var(--cor-destaque), 0 0 20px var(--cor-destaque);
 }
 
 /* Área de resultados */
 #results {
     margin: 20px 0;
     padding: 15px;
-    font-size: 1.2rem;
+    font-size: var(--tamanho-fonte-texto);
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    color: #fff;
+    color: var(--cor-texto);
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     transition: background 0.3s ease;
 }
 
 #results.won {
-    background: #27ae60; /* Verde para vitória */
+    background: var(--cor-vitoria);
     animation: pulse 0.5s ease;
 }
 
 #results.lost {
-    background: #c0392b; /* Vermelho para derrota */
+    background: var(--cor-derrota);
     animation: shake 0.5s ease;
 }
 
@@ -90,13 +111,13 @@ html, body {
 
 /* Estilo para os slots */
 .slots {
-    width: 100px; /* Largura fixa para os slots */
-    height: 100px; /* Altura fixa para os slots */
-    object-fit: contain; /* Mantém a proporção da imagem sem cortar */
-    border: 2px solid #ffcc00; /* Borda amarela */
-    border-radius: 10px; /* Bordas arredondadas */
-    background-color: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efeito de transição */
+    width: var(--tamanho-slot);
+    height: var(--tamanho-slot);
+    object-fit: contain;
+    border: 2px solid var(--cor-destaque);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Animação de rotação dos slots */
@@ -111,14 +132,14 @@ html, body {
 
 /* Efeito de hover nos slots */
 .slots:hover {
-    transform: scale(1.1); /* Aumenta o tamanho do slot */
-    box-shadow: 0 0 15px #ffcc00; /* Efeito de brilho */
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--cor-destaque);
 }
 
 /* Estilo para os slots ganhadores */
 .slots.ganhou {
-    border: 4px solid #27ae60; /* Borda verde */
-    box-shadow: 0 0 15px #27ae60; /* Efeito de brilho */
+    border: 4px solid var(--cor-vitoria);
+    box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
 /* Área de controle (créditos, aposta, ganhos, jogadas) */
@@ -140,7 +161,7 @@ html, body {
 
 .credits label, .bet label, .winnings label, .plays label {
     font-weight: bold;
-    color: #ffcc00;
+    color: var(--cor-destaque);
 }
 
 .credits input, .bet input, .winnings input, .plays input {
@@ -149,7 +170,7 @@ html, body {
     text-align: right;
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--cor-texto);
     font-size: 1rem;
 }
 
@@ -157,7 +178,7 @@ html, body {
 button {
     margin: 20px 0;
     padding: 15px 30px;
-    background: #ffcc00;
+    background: var(--cor-destaque);
     color: #1a1a1a;
     border: none;
     border-radius: 10px;
@@ -184,8 +205,8 @@ button:active {
     }
 
     .slots {
-        width: 80px; /* Reduz o tamanho dos slots em dispositivos móveis */
-        height: 80px;
+        width: var(--tamanho-slot-mobile);
+        height: var(--tamanho-slot-mobile);
     }
 
     button {
@@ -200,7 +221,7 @@ button:active {
     }
 
     .slots {
-        width: 100px; /* Mantém o tamanho padrão em telas maiores */
-        height: 100px;
+        width: var(--tamanho-slot);
+        height: var(--tamanho-slot);
     }
 }
