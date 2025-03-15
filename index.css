@@ -39,12 +39,14 @@ html, body {
 
 /* Conteúdo do contêiner */
 .containerContents {
-    background: var(--cor-fundo-transparente);
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-backdrop-filter: blur(10px); /* Prefixo para Safari e iOS */
+    backdrop-filter: blur(10px); /* Padrão para outros navegadores */
     width: 100%;
     max-width: 500px;
     padding: 20px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px var(--cor-sombra);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     text-align: center;
 }
 
