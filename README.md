@@ -179,7 +179,7 @@ O projeto SlotMadruga é open-source e está licenciado sob a MIT License. Sinta
 Contato
 Para dúvidas, sugestões ou colaborações, entre em contato:
 
-Autor: Misa Andrejezieski
+Autor: Misael Andrejezieski
 
 GitHub: https://github.com/MisaAndrejezieski
 
