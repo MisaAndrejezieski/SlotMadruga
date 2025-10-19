@@ -1,114 +1,121 @@
-const imagens = [
-  "./images/a001.gif","./images/a002.gif","./images/a003.gif",
-  "./images/a004.gif","./images/a005.gif","./images/a006.gif",
-  "./images/a007.gif","./images/a008.gif","./images/a009.gif","./images/stella-cute.gif"
-];
-const pesos = [0.6,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.5,10];
-const multiplicadores = [10,2,2,4,4,4,4,6,6,2];
+function multiplicador() {
+  const quantidadeDeSlot = 9;
+  const apostaFixa = 10;
 
-const slots = document.querySelectorAll(".slots");
-const btnSpin = document.getElementById("btn-spin");
-const btnBuy = document.getElementById("btn-buy");
-const creditsEl = document.getElementById("credits");
-const resultsEl = document.getElementById("results");
-const gifContainer = document.getElementById("gifContainer");
-let derrotasSeguidas = parseInt(localStorage.getItem("derrotas")||"0");
+  const imagens = [
+    "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
+    "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
+    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
+  ];
 
-function selecionarIndiceComPeso(){
-  const total = pesos.reduce((a,b)=>a+b,0);
-  let r = Math.random()*total;
-  for(let i=0;i<pesos.length;i++){ r -= pesos[i]; if(r<0) return i; }
-  return 0;
-}
+  const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
+  const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
 
-function mostrarGif(tipo){
-  gifContainer.innerHTML="";
-  let nome = tipo==="vitoria"?"giphy002.gif":
-             tipo==="derrota"?"giphy003.gif":
-             tipo==="muitas"?"giphy004.gif":"";
-  if(!nome) return;
-  const img = document.createElement("img");
-  img.src = `./images/${nome}`;
-  img.className="gif-feedback";
-  gifContainer.appendChild(img);
-  setTimeout(()=>gifContainer.innerHTML="",4000);
-}
+  const divImagens = document.querySelector(".images");
+  const divResultado = document.getElementById("results");
+  const creditos = document.getElementById("creditos");
+  const gifContainer = document.getElementById("gifContainer");
 
-function comprarCreditos(){
-  const valor = parseInt(prompt("Quantos créditos deseja comprar?","100"));
-  if(!valor||valor<=0)return;
-  creditsEl.value = parseInt(creditsEl.value)+valor;
-  alert(`Você comprou ${valor} créditos!`);
-}
+  let creditosValor = parseInt(creditos.value);
+  let resultados = [];
+  let derrotasConsecutivas = parseInt(localStorage.getItem("derrotas") || "0");
 
-btnBuy.addEventListener("click",comprarCreditos);
-
-btnSpin.addEventListener("click",()=>{
-  let credits = parseInt(creditsEl.value);
-  const aposta=10;
-  if(credits<aposta){ resultsEl.textContent="Créditos insuficientes!"; resultsEl.className="lost"; return;}
-  credits -= aposta; creditsEl.value=credits;
-  resultsEl.textContent="Rodando..."; resultsEl.className="";
-
-  btnSpin.disabled=true; btnBuy.disabled=true;
-  gifContainer.innerHTML="";
-
-  const resultados = new Array(slots.length);
-  const intervals = [];
-
-  slots.forEach((s,i)=>{
-    s.classList.remove("ganhou","stop");
-    s.classList.add("rodando");
-
-    intervals[i]=setInterval(()=>{
-      const idx=selecionarIndiceComPeso();
-      s.src=imagens[idx];
-    },60);
-
-    const delay = 1200 + i*300; // em cascata
-    setTimeout(()=>{
-      clearInterval(intervals[i]);
-      const finalIdx = selecionarIndiceComPeso();
-      s.src = imagens[finalIdx];
-      resultados[i]=finalIdx;
-      s.classList.remove("rodando");
-      s.classList.add("stop");
-
-      if(i===slots.length-1){
-        setTimeout(()=>processarResultado(resultados,aposta),500);
-        btnSpin.disabled=false; btnBuy.disabled=false;
-      }
-    },delay + Math.random()*300); // leve variação
-  });
-});
-
-function processarResultado(resultados,aposta){
-  const combinacoes=[[0,1,2],[3,4,5],[6,7,8],[0,4,8],[2,4,6]];
-  let ganhoTotal=0;
-  const slotsGanhadores=new Set();
-
-  combinacoes.forEach(combo=>{
-    const[a,b,c]=combo;
-    if(resultados[a]===resultados[b] && resultados[a]===resultados[c]){
-      const mult=multiplicadores[resultados[a]]||1;
-      ganhoTotal += aposta*mult;
-      combo.forEach(i=>slotsGanhadores.add(i));
-    }
-  });
-
-  if(ganhoTotal>0){
-    creditsEl.value=parseInt(creditsEl.value)+ganhoTotal;
-    resultsEl.textContent=`Você ganhou ${ganhoTotal} créditos!`;
-    resultsEl.className="won";
-    slotsGanhadores.forEach(i=>slots[i].classList.add("ganhou"));
-    derrotasSeguidas=0;
-    mostrarGif("vitoria");
-  }else{
-    resultsEl.textContent="Mais sorte na próxima vez!";
-    resultsEl.className="lost";
-    derrotasSeguidas++;
-    if(derrotasSeguidas>=10){ mostrarGif("muitas"); derrotasSeguidas=0;}
-    else mostrarGif("derrota");
+  if (apostaFixa > creditosValor) {
+    divResultado.textContent = "Créditos insuficientes!";
+    divResultado.classList = 'lost';
+    return;
   }
-  localStorage.setItem("derrotas",derrotasSeguidas.toString());
+
+  creditosValor -= apostaFixa;
+  creditos.value = creditosValor;
+
+  divResultado.textContent = "Rodando...";
+  divResultado.classList = "";
+  gifContainer.innerHTML = "";
+
+  // Inicia giro suave dos slots
+  document.querySelectorAll(".slots").forEach((slot, i) => {
+    slot.classList.add("rodando");
+    const intervalo = setInterval(() => {
+      const aleatorio = selecionarImagemComPeso();
+      slot.src = imagens[aleatorio];
+    }, 80 + i * 5);
+
+    // Parada gradual em tempos diferentes (efeito natural)
+    setTimeout(() => {
+      clearInterval(intervalo);
+      slot.classList.remove("rodando");
+      const aleatorio = selecionarImagemComPeso();
+      slot.src = imagens[aleatorio];
+      resultados[i] = imagens[aleatorio];
+      if (i === quantidadeDeSlot - 1) verifiqueSeGanhou();
+    }, 1800 + i * 200);
+  });
+
+  function selecionarImagemComPeso() {
+    const totalPesos = pesos.reduce((a, b) => a + b, 0);
+    const numeroAleatorio = Math.random() * totalPesos;
+    let somaPesos = 0;
+    for (let i = 0; i < pesos.length; i++) {
+      somaPesos += pesos[i];
+      if (numeroAleatorio < somaPesos) return i;
+    }
+  }
+
+  function verifiqueSeGanhou() {
+    const linhasVencedoras = [
+      [0,1,2], [3,4,5], [6,7,8],
+      [0,4,8], [2,4,6]
+    ];
+
+    let ganhoTotal = 0;
+    let ganhou = false;
+    const slotsGanhadores = new Set();
+
+    linhasVencedoras.forEach(linha => {
+      const [a,b,c] = linha;
+      if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
+        const indiceImagem = imagens.indexOf(resultados[a]);
+        const multiplicador = multiplicadores[indiceImagem];
+        ganhoTotal += apostaFixa * multiplicador;
+        ganhou = true;
+        linha.forEach(i => slotsGanhadores.add(i));
+      }
+    });
+
+    gifContainer.innerHTML = "";
+
+    if (ganhou) {
+      creditosValor += ganhoTotal;
+      creditos.value = creditosValor;
+      divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
+      divResultado.classList = 'won';
+      derrotasConsecutivas = 0;
+      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback">`;
+    } else {
+      divResultado.textContent = "Mais sorte na próxima vez!";
+      divResultado.classList = 'lost';
+      derrotasConsecutivas++;
+      if (derrotasConsecutivas >= 10) {
+        gifContainer.innerHTML = `<img src="./images/giphy004.gif" class="gif-feedback">`;
+      } else {
+        gifContainer.innerHTML = `<img src="./images/giphy001.gif" class="gif-feedback">`;
+      }
+    }
+
+    localStorage.setItem("derrotas", derrotasConsecutivas);
+    slotsGanhadores.forEach(i => document.querySelector(`.slot-${i + 1}`).classList.add("ganhou"));
+  }
+}
+
+function comprarCreditos() {
+  const creditos = document.getElementById("creditos");
+  const valorAtual = parseInt(creditos.value);
+  const adicional = parseInt(prompt("Quantos créditos deseja comprar via Pix?", "100"));
+  if (!isNaN(adicional) && adicional > 0) {
+    creditos.value = valorAtual + adicional;
+    alert("Pagamento via Pix confirmado! Créditos adicionados com sucesso!");
+  } else {
+    alert("Valor inválido ou operação cancelada.");
+  }
 }
