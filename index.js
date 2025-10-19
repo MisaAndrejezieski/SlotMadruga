@@ -1,178 +1,159 @@
+let derrotasSeguidas = 0;
+
 function multiplicador() {
     const quantidadeDeSlot = 9;
-    var imagens = [
+    const imagens = [
         "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
         "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
-        "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.webp", 
+        "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.webp",
     ];
-    var pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
-    var multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
-    var resultados = [];
+    const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
+    const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
+    const resultados = [];
 
-    var divImagens = document.querySelector(".images");
-    var divResultado = document.getElementById("results");
-    var creditos = document.getElementById("creditos");
-    var aposta = document.getElementById("aposta");
-    var ganhos = document.getElementById("ganhos");
-    var jogadas = document.getElementById("jogadas");
+    const divImagens = document.querySelector(".images");
+    const divResultado = document.getElementById("results");
+    const creditos = document.getElementById("creditos");
+    const aposta = document.getElementById("aposta");
+    const ganhos = document.getElementById("ganhos");
+    const jogadas = document.getElementById("jogadas");
+    const botao = document.getElementById("botao");
 
-    var apostaValor = parseInt(aposta.value);
-    var creditosValor = parseInt(creditos.value);
-    var jogadasValor = parseInt(jogadas.value);
+    const gifOverlay = document.getElementById("gif-overlay");
+    const gifDisplay = document.getElementById("gif-display");
 
-    // Verifica se o jogador tem créditos suficientes
+    const gifs = {
+        win: "./images/win.gif",
+        lose: "./images/lose.gif",
+        unlucky: "./images/unlucky.gif"
+    };
+
+    let apostaValor = parseInt(aposta.value);
+    let creditosValor = parseInt(creditos.value);
+    let jogadasValor = parseInt(jogadas.value);
+
+    // Créditos suficientes?
     if (apostaValor > creditosValor) {
-        divResultado.innerHTML = "Créditos insuficientes!";
-        divResultado.classList = 'lost';
+        divResultado.textContent = "Créditos insuficientes!";
+        divResultado.className = "lost";
         return;
     }
 
-    // Deduz a aposta dos créditos e incrementa o contador de jogadas
     creditosValor -= apostaValor;
     creditos.value = creditosValor;
-    jogadasValor += 1;
+    jogadasValor++;
     jogadas.value = jogadasValor;
 
-    // Reseta o estado do resultado
-    divResultado.classList = "";
-    divResultado.innerHTML = "Rodando...";
+    divResultado.textContent = "Rodando...";
+    divResultado.className = "";
+    ganhos.value = 0;
+    botao.disabled = true;
 
-    // Remove bordas verdes de slots anteriores (se houver)
-    var slots = document.querySelectorAll(".slots");
-    slots.forEach(slot => slot.classList.remove("ganhou"));
+    const slots = document.querySelectorAll(".slots");
+    slots.forEach(slot => {
+        slot.classList.remove("ganhou");
+        slot.classList.add("rodando");
+    });
 
-    // Inicia a rotação dos slots
-    slots.forEach(slot => slot.classList.add("rodando"));
+    let tempoTotal = 0;
+    for (let i = 0; i < quantidadeDeSlot; i++) {
+        const slot = slots[i];
+        const duracao = 1500 + i * 300;
+        rodarSlot(slot, duracao, i);
+        tempoTotal = duracao;
+    }
 
-    // Intervalo para mudar as imagens durante a rotação
-    var intervaloRodando = setInterval(function () {
-        slots.forEach(slot => {
-            var aleatorio = selecionarImagemComPeso();
-            slot.src = imagens[aleatorio];
-        });
-    }, 100); // Muda as imagens a cada 100ms
-
-    // Para a rotação após 2 segundos e verifica o resultado
-    setTimeout(function () {
-        clearInterval(intervaloRodando); // Para de mudar as imagens
-        slots.forEach(slot => slot.classList.remove("rodando"));
-        definirResultados();
+    setTimeout(() => {
         verifiqueSeGanhou();
-    }, 2000); // 2 segundos de rotação
+        botao.disabled = false;
+    }, tempoTotal + 400);
 
-    // Função para definir os resultados finais dos slots
-    function definirResultados() {
-        for (var i = 0; i < quantidadeDeSlot; i++) {
-            var aleatorio = selecionarImagemComPeso();
-            var slotName = '.slot-' + (i + 1);
-            var slotAtual = divImagens.querySelector(slotName);
-            slotAtual.src = imagens[aleatorio];
-            resultados[i] = imagens[aleatorio];
-        }
+    function rodarSlot(slot, duracao, indice) {
+        const intervalo = setInterval(() => {
+            const aleatorio = selecionarImagemComPeso();
+            slot.src = imagens[aleatorio];
+        }, 75);
+
+        setTimeout(() => {
+            clearInterval(intervalo);
+            const aleatorioFinal = selecionarImagemComPeso();
+            slot.src = imagens[aleatorioFinal];
+            slot.classList.remove("rodando");
+            resultados[indice] = imagens[aleatorioFinal];
+
+            slot.animate([{ transform: "scale(1)" }, { transform: "scale(1.1)" }, { transform: "scale(1)" }],
+                { duration: 300, easing: "ease-out" });
+        }, duracao);
     }
 
-    // Função para selecionar uma imagem com base nos pesos
     function selecionarImagemComPeso() {
-        var totalPesos = pesos.reduce((a, b) => a + b, 0);
-        var numeroAleatorio = Math.random() * totalPesos;
-        var somaPesos = 0;
-        for (var i = 0; i < pesos.length; i++) {
+        const totalPesos = pesos.reduce((a, b) => a + b, 0);
+        const numeroAleatorio = Math.random() * totalPesos;
+        let somaPesos = 0;
+        for (let i = 0; i < pesos.length; i++) {
             somaPesos += pesos[i];
-            if (numeroAleatorio < somaPesos) {
-                return i;
-            }
+            if (numeroAleatorio < somaPesos) return i;
         }
+        return 0;
     }
 
-    // Função para verificar se o jogador ganhou
     function verifiqueSeGanhou() {
-        var linhas = [
-            [resultados[0], resultados[1], resultados[2]], // Linha 1
-            [resultados[3], resultados[4], resultados[5]], // Linha 2
-            [resultados[6], resultados[7], resultados[8]]  // Linha 3
-        ];
-        var colunas = [
-            [resultados[0], resultados[3], resultados[6]], // Coluna 1
-            [resultados[1], resultados[4], resultados[7]], // Coluna 2
-            [resultados[2], resultados[5], resultados[8]]  // Coluna 3
+        const combinacoes = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 4, 8],
+            [2, 4, 6]
         ];
 
-        var ganhoTotal = 0;
-        var ganhou = false;
-        var slotsGanhadores = new Set(); // Armazena os índices dos slots ganhadores
+        let ganhoTotal = 0;
+        let ganhou = false;
+        const slotsGanhadores = new Set();
 
-        // Verifica linhas
-        for (var i = 0; i < linhas.length; i++) {
-            if (linhas[i][0] === linhas[i][1] && linhas[i][0] === linhas[i][2]) {
-                var indiceImagem = imagens.indexOf(linhas[i][0]);
-                var multiplicadorGanho = multiplicadores[indiceImagem];
-                ganhoTotal += apostaValor * multiplicadorGanho;
+        combinacoes.forEach(indices => {
+            const [a, b, c] = indices;
+            if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
+                const indiceImagem = imagens.indexOf(resultados[a]);
+                const ganho = apostaValor * multiplicadores[indiceImagem];
+                ganhoTotal += ganho;
                 ganhou = true;
-
-                // Adiciona os slots ganhadores ao conjunto
-                slotsGanhadores.add(i * 3);     // Primeiro slot da linha
-                slotsGanhadores.add(i * 3 + 1); // Segundo slot da linha
-                slotsGanhadores.add(i * 3 + 2); // Terceiro slot da linha
-            }
-        }
-
-        // Verifica colunas
-        for (var i = 0; i < colunas.length; i++) {
-            if (colunas[i][0] === colunas[i][1] && colunas[i][0] === colunas[i][2]) {
-                var indiceImagem = imagens.indexOf(colunas[i][0]);
-                var multiplicadorGanho = multiplicadores[indiceImagem];
-                ganhoTotal += apostaValor * multiplicadorGanho;
-                ganhou = true;
-
-                // Adiciona os slots ganhadores ao conjunto
-                slotsGanhadores.add(i);         // Primeiro slot da coluna
-                slotsGanhadores.add(i + 3);     // Segundo slot da coluna
-                slotsGanhadores.add(i + 6);     // Terceiro slot da coluna
-            }
-        }
-
-        // Verifica quantas vezes cada imagem aparece nos resultados
-        var contagemImagens = {};
-        resultados.forEach(imagem => {
-            if (contagemImagens[imagem]) {
-                contagemImagens[imagem]++;
-            } else {
-                contagemImagens[imagem] = 1;
+                indices.forEach(i => slotsGanhadores.add(i));
             }
         });
 
-        // Aplica multiplicador adicional para 6 ou 9 imagens iguais
-        for (var imagem in contagemImagens) {
-            if (contagemImagens[imagem] >= 6) {
-                var indiceImagem = imagens.indexOf(imagem);
-                var multiplicadorAdicional = (contagemImagens[imagem] >= 9) ? 3 : 2; // Triplica se 9, dobra se 6
-                ganhoTotal *= multiplicadorAdicional;
-                divResultado.innerHTML += ` (${multiplicadorAdicional}x por ${contagemImagens[imagem]} imagens iguais!)`;
-            }
-        }
-
-        // Atualiza o estado do jogo com base no resultado
         if (ganhou) {
+            derrotasSeguidas = 0;
             creditosValor += ganhoTotal;
             creditos.value = creditosValor;
             ganhos.value = ganhoTotal;
-            divResultado.innerHTML = "Você ganhou " + ganhoTotal + " créditos!";
-            divResultado.classList = 'won';
-
-            // Adiciona borda verde aos slots ganhadores
-            slotsGanhadores.forEach(indice => {
-                var slotGanhador = document.querySelector(`.slot-${indice + 1}`);
-                slotGanhador.classList.add("ganhou");
-            });
+            divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
+            divResultado.className = "won";
+            slotsGanhadores.forEach(i => document.querySelector(`.slot-${i + 1}`).classList.add("ganhou"));
+            mostrarGif(gifs.win);
         } else {
+            derrotasSeguidas++;
             ganhos.value = 0;
-            divResultado.innerHTML = "Mais sorte na próxima vez!";
-            divResultado.classList = 'lost';
+            divResultado.textContent = "Mais sorte na próxima vez!";
+            divResultado.className = "lost";
+            if (derrotasSeguidas >= 10) {
+                mostrarGif(gifs.unlucky);
+            } else {
+                mostrarGif(gifs.lose);
+            }
         }
 
-        // Zera o contador de jogadas se os créditos acabarem
         if (creditosValor <= 0) {
             jogadas.value = 0;
         }
+    }
+
+    function mostrarGif(caminho) {
+        gifDisplay.src = caminho;
+        gifOverlay.classList.remove("hidden");
+        gifOverlay.classList.add("show");
+        setTimeout(() => {
+            gifOverlay.classList.remove("show");
+            gifOverlay.classList.add("hidden");
+        }, 3500);
     }
 }
