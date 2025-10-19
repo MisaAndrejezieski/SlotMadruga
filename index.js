@@ -8,7 +8,7 @@ function multiplicador() {
     "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
   ];
 
-  const pesos = [0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.6, 0.7];
+  const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
   const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
 
   const divImagens = document.querySelector(".images");
@@ -103,14 +103,16 @@ function multiplicador() {
       divResultado.textContent = `🎉 Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
-      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback" alt="Vitória" title="Vitória">`;
+      mostrarGif("./images/giphy002.gif");
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
       derrotasConsecutivas++;
-      gifContainer.innerHTML = derrotasConsecutivas >= 10
-        ? `<img src="./images/giphy004.gif" class="gif-feedback" alt="Perdeu" title="Perdeu">`
-        : `<img src="./images/giphy001.gif" class="gif-feedback" alt="Tente novamente" title="Tente novamente">`;
+      if (derrotasConsecutivas >= 10) {
+        mostrarGif("./images/giphy004.gif");
+      } else {
+        mostrarGif("./images/giphy003.gif");
+      }
     }
 
     localStorage.setItem("derrotas", derrotasConsecutivas);
@@ -119,9 +121,17 @@ function multiplicador() {
       document.querySelector(`.slot-${i + 1}`).classList.add("ganhou");
     });
   }
+
+  // Mostra o GIF e o remove após 4 segundos
+  function mostrarGif(caminho) {
+    gifContainer.innerHTML = `<img src="${caminho}" class="gif-feedback" alt="Resultado" title="Resultado">`;
+    setTimeout(() => {
+      gifContainer.innerHTML = "";
+    }, 4000);
+  }
 }
 
-// Simulação de compra de créditos via Pix
+// Simula compra de créditos via Pix
 function comprarCreditos() {
   const creditos = document.getElementById("creditos");
   let valorAtual = parseInt(creditos.value);
