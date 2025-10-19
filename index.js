@@ -1,48 +1,46 @@
-let derrotasSeguidas = 0;
-
 function multiplicador() {
   const quantidadeDeSlot = 9;
+  const apostaFixa = 10; // Valor fixo de aposta
+
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
     "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
-    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/alice-hana.gif",
+    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.webp"
   ];
+
   const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
   const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
-  const resultados = [];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
   const creditos = document.getElementById("creditos");
-  const aposta = document.getElementById("aposta");
-  const ganhos = document.getElementById("ganhos");
-  const jogadas = document.getElementById("jogadas");
-  const gifFeedback = document.getElementById("gifFeedback");
+  const gifContainer = document.getElementById("gifContainer");
 
-  let apostaValor = parseInt(aposta.value);
   let creditosValor = parseInt(creditos.value);
-  let jogadasValor = parseInt(jogadas.value);
+  let resultados = [];
+  let derrotasConsecutivas = parseInt(localStorage.getItem("derrotas") || "0");
 
-  if (apostaValor > creditosValor) {
-    divResultado.innerHTML = "Créditos insuficientes!";
+  // Verifica créditos
+  if (apostaFixa > creditosValor) {
+    divResultado.textContent = "Créditos insuficientes!";
     divResultado.classList = 'lost';
     return;
   }
 
-  creditosValor -= apostaValor;
+  // Deduz aposta
+  creditosValor -= apostaFixa;
   creditos.value = creditosValor;
-  jogadasValor += 1;
-  jogadas.value = jogadasValor;
 
+  divResultado.textContent = "Rodando...";
   divResultado.classList = "";
-  divResultado.innerHTML = "Rodando...";
 
-  const slots = document.querySelectorAll(".slots");
-  slots.forEach(slot => slot.classList.remove("ganhou"));
-  slots.forEach(slot => slot.classList.add("rodando"));
+  document.querySelectorAll(".slots").forEach(slot => {
+    slot.classList.remove("ganhou");
+    slot.classList.add("rodando");
+  });
 
   const intervaloRodando = setInterval(() => {
-    slots.forEach(slot => {
+    document.querySelectorAll(".slots").forEach(slot => {
       const aleatorio = selecionarImagemComPeso();
       slot.src = imagens[aleatorio];
     });
@@ -50,24 +48,14 @@ function multiplicador() {
 
   setTimeout(() => {
     clearInterval(intervaloRodando);
-    slots.forEach(slot => slot.classList.remove("rodando"));
+    document.querySelectorAll(".slots").forEach(slot => slot.classList.remove("rodando"));
     definirResultados();
-    verificarLinhasDePremio();
-  }, 2000);
-
-  function definirResultados() {
-    for (let i = 0; i < quantidadeDeSlot; i++) {
-      const aleatorio = selecionarImagemComPeso();
-      const slotName = `.slot-${i + 1}`;
-      const slotAtual = divImagens.querySelector(slotName);
-      slotAtual.src = imagens[aleatorio];
-      resultados[i] = imagens[aleatorio];
-    }
-  }
+    verifiqueSeGanhou();
+  }, 2500);
 
   function selecionarImagemComPeso() {
     const totalPesos = pesos.reduce((a, b) => a + b, 0);
-    let numeroAleatorio = Math.random() * totalPesos;
+    const numeroAleatorio = Math.random() * totalPesos;
     let somaPesos = 0;
     for (let i = 0; i < pesos.length; i++) {
       somaPesos += pesos[i];
@@ -75,62 +63,60 @@ function multiplicador() {
     }
   }
 
-  function verificarLinhasDePremio() {
-    const linhasPremio = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
-      [0, 4, 8], [2, 4, 6]            // Diagonais
+  function definirResultados() {
+    for (let i = 0; i < quantidadeDeSlot; i++) {
+      const aleatorio = selecionarImagemComPeso();
+      const slotAtual = divImagens.querySelector(`.slot-${i + 1}`);
+      slotAtual.src = imagens[aleatorio];
+      resultados[i] = imagens[aleatorio];
+    }
+  }
+
+  function verifiqueSeGanhou() {
+    const linhasVencedoras = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // linhas
+      [0, 4, 8], [2, 4, 6] // diagonais
     ];
 
     let ganhoTotal = 0;
     let ganhou = false;
     const slotsGanhadores = new Set();
 
-    for (const linha of linhasPremio) {
+    linhasVencedoras.forEach(linha => {
       const [a, b, c] = linha;
       if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
         const indiceImagem = imagens.indexOf(resultados[a]);
-        const multiplicadorGanho = multiplicadores[indiceImagem];
-        ganhoTotal += apostaValor * multiplicadorGanho;
+        const multiplicador = multiplicadores[indiceImagem];
+        ganhoTotal += apostaFixa * multiplicador;
         ganhou = true;
         linha.forEach(i => slotsGanhadores.add(i));
       }
-    }
+    });
+
+    gifContainer.innerHTML = "";
 
     if (ganhou) {
-      derrotasSeguidas = 0;
       creditosValor += ganhoTotal;
       creditos.value = creditosValor;
-      ganhos.value = ganhoTotal;
-      divResultado.innerHTML = "Você ganhou " + ganhoTotal + " créditos!";
+      divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
-      mostrarGif("./images/a010.webp");
-
-      slotsGanhadores.forEach(indice => {
-        const slotGanhador = document.querySelector(`.slot-${indice + 1}`);
-        slotGanhador.classList.add("ganhou");
-      });
+      derrotasConsecutivas = 0;
+      gifContainer.innerHTML = `<img src="./images/giphy002.gif" class="gif-feedback">`;
     } else {
-      ganhos.value = 0;
-      divResultado.innerHTML = "Mais sorte na próxima vez!";
+      divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
-      derrotasSeguidas++;
-      if (derrotasSeguidas >= 10) {
-        mostrarGif("./images/giphy004.gif");
+      derrotasConsecutivas++;
+      if (derrotasConsecutivas >= 10) {
+        gifContainer.innerHTML = `<img src="./images/giphy004.gif" class="gif-feedback">`;
       } else {
-        mostrarGif("./images/giphy001.gif");
+        gifContainer.innerHTML = `<img src="./images/giphy003.gif" class="gif-feedback">`;
       }
     }
 
-    if (creditosValor <= 0) {
-      jogadas.value = 0;
-    }
-  }
+    localStorage.setItem("derrotas", derrotasConsecutivas);
 
-  function mostrarGif(caminho) {
-    gifFeedback.innerHTML = `<img src="${caminho}" alt="Feedback" />`;
-    gifFeedback.classList.add("ativo");
-    setTimeout(() => {
-      gifFeedback.classList.remove("ativo");
-    }, 4000);
+    slotsGanhadores.forEach(i => {
+      document.querySelector(`.slot-${i + 1}`).classList.add("ganhou");
+    });
   }
 }
