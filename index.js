@@ -1,155 +1,124 @@
-:root {
-  --cor-fundo: linear-gradient(135deg, #1a1a1a, #333);
-  --cor-texto: #fff;
-  --cor-destaque: #ffcc00;
-  --cor-vitoria: #27ae60;
-  --cor-derrota: #c0392b;
-  --cor-fundo-transparente: rgba(0, 0, 0, 0.8);
-  --tamanho-slot: 90px;
+function multiplicador() {
+  const quantidadeDeSlot = 9;
+  const apostaFixa = 10;
+
+  const imagens = [
+    "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
+    "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
+    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif",
+    "./images/stella-cute.gif", "./images/a011.gif",
+  ];
+
+  const pesos = [0.4, 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
+  const multiplicadores = [5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 1];
+
+  const divImagens = document.querySelector(".images");
+  const divResultado = document.getElementById("results");
+  const creditos = document.getElementById("creditos");
+  const gifContainer = document.getElementById("gifContainer");
+
+  let creditosValor = parseInt(creditos.value);
+  let resultados = [];
+  let derrotasConsecutivas = parseInt(localStorage.getItem("derrotas") || "0");
+
+  if (apostaFixa > creditosValor) {
+    divResultado.textContent = "Créditos insuficientes!";
+    divResultado.classList = 'lost';
+    return;
+  }
+
+  creditosValor -= apostaFixa;
+  creditos.value = creditosValor;
+
+  divResultado.textContent = "Rodando...";
+  divResultado.classList = "";
+
+  const slots = document.querySelectorAll(".slots");
+  slots.forEach(slot => slot.classList.add("rodando"));
+
+  const intervaloRodando = setInterval(() => {
+    slots.forEach(slot => {
+      const aleatorio = selecionarImagemComPeso();
+      slot.src = imagens[aleatorio];
+    });
+  }, 100);
+
+  setTimeout(() => {
+    clearInterval(intervaloRodando);
+    slots.forEach(slot => slot.classList.remove("rodando"));
+    definirResultados();
+    verifiqueSeGanhou();
+  }, 2000);
+
+  function selecionarImagemComPeso() {
+    const totalPesos = pesos.reduce((a, b) => a + b, 0);
+    const numeroAleatorio = Math.random() * totalPesos;
+    let somaPesos = 0;
+    for (let i = 0; i < pesos.length; i++) {
+      somaPesos += pesos[i];
+      if (numeroAleatorio < somaPesos) return i;
+    }
+  }
+
+  function definirResultados() {
+    for (let i = 0; i < quantidadeDeSlot; i++) {
+      const aleatorio = selecionarImagemComPeso();
+      const slotAtual = divImagens.querySelector(`.slot-${i + 1}`);
+      slotAtual.src = imagens[aleatorio];
+      resultados[i] = imagens[aleatorio];
+    }
+  }
+
+  function verifiqueSeGanhou() {
+    const linhasVencedoras = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+
+    let ganhoTotal = 0;
+    let ganhou = false;
+    const slotsGanhadores = new Set();
+
+    linhasVencedoras.forEach(linha => {
+      const [a, b, c] = linha;
+      if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
+        const indiceImagem = imagens.indexOf(resultados[a]);
+        ganhoTotal += apostaFixa * multiplicadores[indiceImagem];
+        ganhou = true;
+        linha.forEach(i => slotsGanhadores.add(i));
+      }
+    });
+
+    gifContainer.innerHTML = "";
+
+    if (ganhou) {
+      creditosValor += ganhoTotal;
+      creditos.value = creditosValor;
+      divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
+      divResultado.classList = 'won';
+      derrotasConsecutivas = 0;
+      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback">`;
+    } else {
+      divResultado.textContent = "Mais sorte na próxima vez!";
+      divResultado.classList = 'lost';
+      derrotasConsecutivas++;
+      gifContainer.innerHTML = derrotasConsecutivas >= 10
+        ? `<img src="./images/giphy004.gif" class="gif-feedback">`
+        : `<img src="./images/giphy001.gif" class="gif-feedback">`;
+    }
+
+    localStorage.setItem("derrotas", derrotasConsecutivas);
+
+    slotsGanhadores.forEach(i => {
+      document.querySelector(`.slot-${i + 1}`).classList.add("ganhou");
+    });
+  }
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Roboto', sans-serif;
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  position: relative;
-}
-
-.container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url('./images/alice-hana.gif');
-  background-size: cover;
-  background-position: center;
-  filter: brightness(0.5);
-  z-index: 0;
-}
-
-.containerContents {
-  position: relative;
-  z-index: 1;
-  background: rgba(0, 0, 0, 0.8);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  width: 90%;
-  max-width: 380px;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-}
-
-.title h2 {
-  margin: 0;
-  font-size: 2rem;
-  color: var(--cor-destaque);
-}
-
-#results {
-  margin: 15px 0;
-  padding: 10px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.1);
-  font-size: 1rem;
-  transition: background 0.3s;
-}
-
-#results.won { background: var(--cor-vitoria); }
-#results.lost { background: var(--cor-derrota); }
-
-.images {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin: 10px 0;
-}
-
-.slots {
-  width: var(--tamanho-slot);
-  height: var(--tamanho-slot);
-  border-radius: 10px;
-  border: 2px solid var(--cor-destaque);
-  background: rgba(255,255,255,0.1);
-  object-fit: contain;
-  transition: transform 0.3s ease-in-out;
-}
-
-.slots.spin {
-  animation: roll 0.6s ease-in-out infinite;
-}
-
-@keyframes roll {
-  0% { transform: translateY(0); }
-  25% { transform: translateY(-10px); }
-  50% { transform: translateY(10px); }
-  75% { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
-}
-
-.slots.ganhou {
-  border: 3px solid var(--cor-vitoria);
-  box-shadow: 0 0 15px var(--cor-vitoria);
-}
-
-button {
-  padding: 12px 25px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  background: var(--cor-destaque);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-button:hover {
-  background: #ffdd33;
-  transform: translateY(-4px);
-}
-
-.credits {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  background: rgba(255,255,255,0.1);
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.credits label {
-  color: var(--cor-destaque);
-  font-weight: bold;
-}
-
-.credits input {
-  width: 80px;
-  background: transparent;
-  border: none;
-  color: var(--cor-texto);
-  font-size: 1rem;
-  text-align: right;
-}
-
-.gif-container {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  z-index: 999;
-}
-
-.gif-feedback {
-  width: 100px;
-  height: auto;
-  border-radius: 10px;
+function comprarCreditos() {
+  const valor = prompt("Digite quantos créditos deseja comprar:");
+  if (!valor || isNaN(valor) || valor <= 0) return;
+  const creditos = document.getElementById("creditos");
+  creditos.value = parseInt(creditos.value) + parseInt(valor);
+  alert(`Você comprou ${valor} créditos!`);
 }
