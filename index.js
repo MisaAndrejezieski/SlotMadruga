@@ -7,7 +7,7 @@ function multiplicador() {
         "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
         "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.webp",
     ];
-    const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7];
+    const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
     const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
     const resultados = [];
 
@@ -23,9 +23,9 @@ function multiplicador() {
     const gifDisplay = document.getElementById("gif-display");
 
     const gifs = {
-        win: "./images/win.gif",
-        lose: "./images/lose.gif",
-        unlucky: "./images/unlucky.gif"
+        win: "./images/giphy001.gif",
+        lose: "./images/giphy002.gif",
+        unlucky: "./images/giphy003.gif",
     };
 
     let apostaValor = parseInt(aposta.value);
@@ -129,16 +129,16 @@ function multiplicador() {
             divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
             divResultado.className = "won";
             slotsGanhadores.forEach(i => document.querySelector(`.slot-${i + 1}`).classList.add("ganhou"));
-            mostrarGif("./images/giphy002");
+            mostrarGif(gifs.win);
         } else {
             derrotasSeguidas++;
             ganhos.value = 0;
             divResultado.textContent = "Mais sorte na próxima vez!";
             divResultado.className = "lost";
             if (derrotasSeguidas >= 10) {
-                mostrarGif("./images/giphy002");
+                mostrarGif(gifs.unlucky);
             } else {
-                mostrarGif("./images/giphy003");
+                mostrarGif(gifs.lose);
             }
         }
 
