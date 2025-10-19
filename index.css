@@ -4,6 +4,7 @@
   --cor-destaque: #ffcc00;
   --cor-vitoria: #27ae60;
   --cor-derrota: #c0392b;
+  --cor-fundo-transparente: rgba(0, 0, 0, 0.8);
   --tamanho-slot: 90px;
 }
 
@@ -40,7 +41,11 @@ html, body {
   position: relative;
   z-index: 1;
   background: rgba(0, 0, 0, 0.8);
+
+  /* Suporte total */
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+
   width: 90%;
   max-width: 380px;
   padding: 20px;
@@ -53,6 +58,7 @@ html, body {
   margin: 0;
   font-size: 2rem;
   color: var(--cor-destaque);
+  text-align: center;
 }
 
 #results {
@@ -60,6 +66,7 @@ html, body {
   padding: 10px;
   border-radius: 10px;
   background: rgba(255,255,255,0.1);
+  font-size: 1rem;
 }
 
 #results.won { background: var(--cor-vitoria); }
@@ -79,39 +86,39 @@ html, body {
   border: 2px solid var(--cor-destaque);
   background: rgba(255,255,255,0.1);
   object-fit: contain;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease;
 }
 
-.slots.rodando {
-  animation: slotSpin 0.15s linear infinite;
+/* Giro suave com leve oscilação */
+.rodando-suave {
+  animation: giroSuave 0.15s linear infinite;
 }
 
-@keyframes slotSpin {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
-  100% { transform: translateY(0); }
+@keyframes giroSuave {
+  0% { transform: scale(1) rotateX(0deg); }
+  50% { transform: scale(1.05) rotateX(180deg); }
+  100% { transform: scale(1) rotateX(360deg); }
 }
 
 .slots.ganhou {
   border: 3px solid var(--cor-vitoria);
   box-shadow: 0 0 15px var(--cor-vitoria);
-  transform: scale(1.05);
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 1rem;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
   background: var(--cor-destaque);
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  font-weight: bold;
   transition: all 0.3s;
 }
 
 button:hover {
   background: #ffdd33;
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 button:active {
@@ -120,8 +127,9 @@ button:active {
 
 .buttons {
   display: flex;
-  justify-content: space-around;
-  margin-top: 15px;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .credits {
