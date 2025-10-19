@@ -4,14 +4,10 @@
   --cor-destaque: #ffcc00;
   --cor-vitoria: #27ae60;
   --cor-derrota: #c0392b;
-  --cor-sombra: rgba(0, 0, 0, 0.5);
-  --tamanho-fonte-titulo: 2.5rem;
-  --tamanho-fonte-texto: 1.2rem;
-  --tamanho-slot: 90px;
-  --tamanho-slot-mobile: 70px;
+  --tamanho-slot: 100px;
 }
 
-html, body {
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -22,12 +18,10 @@ html, body {
 
 .container {
   position: relative;
-  width: 100%;
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 .container::before {
@@ -38,71 +32,50 @@ html, body {
   width: 100%;
   height: 100%;
   background-image: url('./images/alice-hana.gif');
-  background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  z-index: 0;
   filter: brightness(0.5);
+  z-index: 0;
 }
 
 .containerContents {
   position: relative;
   z-index: 1;
   background: rgba(0, 0, 0, 0.8);
-  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  width: 100%;
-  max-width: 420px;
+  width: 90%;
+  max-width: 400px;
   padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
   text-align: center;
 }
 
-.title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
 .title h2 {
-  font-size: var(--tamanho-fonte-titulo);
   margin: 0 auto;
+  font-size: 2rem;
   color: var(--cor-destaque);
-  text-shadow: 0 0 10px var(--cor-destaque), 0 0 20px var(--cor-destaque);
+  text-shadow: 0 0 10px var(--cor-destaque);
 }
 
 #results {
-  margin: 20px 0;
+  margin: 15px 0;
   padding: 10px;
-  font-size: var(--tamanho-fonte-texto);
-  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  transition: background 0.3s ease;
 }
 
-#results.won { background: var(--cor-vitoria); animation: pulse 0.5s ease; }
-#results.lost { background: var(--cor-derrota); animation: shake 0.5s ease; }
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+#results.won {
+  background: var(--cor-vitoria);
 }
 
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  50% { transform: translateX(10px); }
-  75% { transform: translateX(-10px); }
-  100% { transform: translateX(0); }
+#results.lost {
+  background: var(--cor-derrota);
 }
 
 .images {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
+  justify-items: center;
   margin: 15px 0;
 }
 
@@ -111,17 +84,7 @@ html, body {
   height: var(--tamanho-slot);
   border: 2px solid var(--cor-destaque);
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.slots.rodando {
-  animation: spin 0.5s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotateX(0deg); }
-  100% { transform: rotateX(360deg); }
+  object-fit: contain;
 }
 
 .slots.ganhou {
@@ -132,84 +95,45 @@ html, body {
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 15px 0;
+  gap: 10px;
 }
 
-.credits, .bet, .winnings, .plays {
+.controls div {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 8px;
-  border-radius: 10px;
-}
-
-.credits label, .bet label, .winnings label, .plays label {
-  font-weight: bold;
-  color: var(--cor-destaque);
-}
-
-.credits input, .bet input, .winnings input, .plays input {
-  width: 60%;
-  padding: 5px;
-  text-align: right;
-  background: transparent;
-  border: none;
-  color: var(--cor-texto);
-  font-size: 1rem;
 }
 
 button {
-  margin-top: 10px;
+  margin-top: 15px;
   padding: 12px 25px;
-  background: var(--cor-destaque);
-  color: #1a1a1a;
   border: none;
+  background: var(--cor-destaque);
+  color: #000;
   border-radius: 10px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 button:hover {
-  background: #ffdd33;
-  transform: translateY(-4px);
+  background: #ffdf33;
 }
 
-button:active {
-  transform: translateY(0);
-}
-
-/* Feedback GIF */
-#feedback-gif-container {
+.gifFeedback {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 50;
-  pointer-events: none;
+  bottom: 15px;
+  right: 15px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-.feedback-gif {
+.gifFeedback.ativo {
+  opacity: 1;
+}
+
+.gifFeedback img {
   width: 120px;
   height: auto;
   border-radius: 10px;
-  opacity: 0.9;
-}
-
-@media screen and (max-width: 767.98px) {
-  .containerContents {
-    max-width: 95%;
-    padding: 15px;
-  }
-
-  .slots {
-    width: var(--tamanho-slot-mobile);
-    height: var(--tamanho-slot-mobile);
-  }
-
-  .feedback-gif {
-    width: 80px;
-  }
 }
