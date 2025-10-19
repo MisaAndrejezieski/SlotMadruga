@@ -43,12 +43,14 @@ body {
   z-index: 1;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Suporte para Safari */
   width: 90%;
   max-width: 400px;
   padding: 20px;
   border-radius: 15px;
   text-align: center;
 }
+
 
 .title h2 {
   margin: 0 auto;
