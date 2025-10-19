@@ -2,9 +2,9 @@ function multiplicador() {
     const quantidadeDeSlot = 9;
     var imagens = [
         "./images/a001.gif", "./images/a002.gif", "./images/a003.webp",
-        "./images/a004.gif", "./images/a005.gif", "./images/a006.png",
-        "./images/a007.png", "./images/a008.png", "./images/a009.png",
-        "./images/a010.png", "./images/a011.png",
+        "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
+        "./images/a007.gif", "./images/a008.gif", "./images/a009.gif",
+        "./images/a010.gif", "./images/a011.gif",
     ];
     var pesos = [0.9, 0.8, 0.7, 0.78, 0.75, 0.73, 0.7, 0.5, 0.6, 0.4, 0.3];
     var multiplicadores = [2, 2, 2, 2, 4, 4, 4, 4, 6, 6, 10];
