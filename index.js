@@ -9,8 +9,8 @@ function multiplicador() {
     "./images/stella-cute.gif", "./images/a011.gif",
   ];
 
-  const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 0.6, 0.5];
-  const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2, 2];
+  const pesos = [0.4, 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.6, 6.5];
+  const multiplicadores = [5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 1];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
