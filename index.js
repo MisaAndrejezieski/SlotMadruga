@@ -5,7 +5,7 @@ function multiplicador() {
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
     "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
-    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.webp"
+    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
   ];
 
   const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
@@ -101,7 +101,7 @@ function multiplicador() {
       divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
-      gifContainer.innerHTML = `<img src="./images/giphy002.gif" class="gif-feedback">`;
+      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback">`;
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
