@@ -26,31 +26,34 @@ function multiplicador() {
     return;
   }
 
+  // Deduz aposta
   creditosValor -= apostaFixa;
   creditos.value = creditosValor;
 
   divResultado.textContent = "Rodando...";
   divResultado.classList = "";
-  gifContainer.innerHTML = "";
 
-  // Inicia giro suave dos slots
-  document.querySelectorAll(".slots").forEach((slot, i) => {
-    slot.classList.add("rodando");
-    const intervalo = setInterval(() => {
-      const aleatorio = selecionarImagemComPeso();
-      slot.src = imagens[aleatorio];
-    }, 80 + i * 5);
+  const slots = document.querySelectorAll(".slots");
 
-    // Parada gradual em tempos diferentes (efeito natural)
-    setTimeout(() => {
-      clearInterval(intervalo);
-      slot.classList.remove("rodando");
-      const aleatorio = selecionarImagemComPeso();
-      slot.src = imagens[aleatorio];
-      resultados[i] = imagens[aleatorio];
-      if (i === quantidadeDeSlot - 1) verifiqueSeGanhou();
-    }, 1800 + i * 200);
+  // Efeito visual de giro suave
+  slots.forEach(slot => {
+    slot.classList.remove("ganhou");
+    slot.classList.add("rodando-suave");
   });
+
+  const intervaloRodando = setInterval(() => {
+    slots.forEach(slot => {
+      const aleatorio = selecionarImagemComPeso();
+      slot.src = imagens[aleatorio];
+    });
+  }, 80);
+
+  setTimeout(() => {
+    clearInterval(intervaloRodando);
+    slots.forEach(slot => slot.classList.remove("rodando-suave"));
+    definirResultados();
+    verifiqueSeGanhou();
+  }, 2500);
 
   function selecionarImagemComPeso() {
     const totalPesos = pesos.reduce((a, b) => a + b, 0);
@@ -62,10 +65,19 @@ function multiplicador() {
     }
   }
 
+  function definirResultados() {
+    for (let i = 0; i < quantidadeDeSlot; i++) {
+      const aleatorio = selecionarImagemComPeso();
+      const slotAtual = divImagens.querySelector(`.slot-${i + 1}`);
+      slotAtual.src = imagens[aleatorio];
+      resultados[i] = imagens[aleatorio];
+    }
+  }
+
   function verifiqueSeGanhou() {
     const linhasVencedoras = [
-      [0,1,2], [3,4,5], [6,7,8],
-      [0,4,8], [2,4,6]
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 4, 8], [2, 4, 6]
     ];
 
     let ganhoTotal = 0;
@@ -73,7 +85,7 @@ function multiplicador() {
     const slotsGanhadores = new Set();
 
     linhasVencedoras.forEach(linha => {
-      const [a,b,c] = linha;
+      const [a, b, c] = linha;
       if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
         const indiceImagem = imagens.indexOf(resultados[a]);
         const multiplicador = multiplicadores[indiceImagem];
@@ -88,34 +100,36 @@ function multiplicador() {
     if (ganhou) {
       creditosValor += ganhoTotal;
       creditos.value = creditosValor;
-      divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
+      divResultado.textContent = `🎉 Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
-      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback">`;
+      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback" alt="Vitória" title="Vitória">`;
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
       derrotasConsecutivas++;
-      if (derrotasConsecutivas >= 10) {
-        gifContainer.innerHTML = `<img src="./images/giphy004.gif" class="gif-feedback">`;
-      } else {
-        gifContainer.innerHTML = `<img src="./images/giphy001.gif" class="gif-feedback">`;
-      }
+      gifContainer.innerHTML = derrotasConsecutivas >= 10
+        ? `<img src="./images/giphy004.gif" class="gif-feedback" alt="Perdeu" title="Perdeu">`
+        : `<img src="./images/giphy001.gif" class="gif-feedback" alt="Tente novamente" title="Tente novamente">`;
     }
 
     localStorage.setItem("derrotas", derrotasConsecutivas);
-    slotsGanhadores.forEach(i => document.querySelector(`.slot-${i + 1}`).classList.add("ganhou"));
+
+    slotsGanhadores.forEach(i => {
+      document.querySelector(`.slot-${i + 1}`).classList.add("ganhou");
+    });
   }
 }
 
+// Simulação de compra de créditos via Pix
 function comprarCreditos() {
   const creditos = document.getElementById("creditos");
-  const valorAtual = parseInt(creditos.value);
-  const adicional = parseInt(prompt("Quantos créditos deseja comprar via Pix?", "100"));
-  if (!isNaN(adicional) && adicional > 0) {
-    creditos.value = valorAtual + adicional;
-    alert("Pagamento via Pix confirmado! Créditos adicionados com sucesso!");
-  } else {
-    alert("Valor inválido ou operação cancelada.");
+  let valorAtual = parseInt(creditos.value);
+
+  const confirmar = confirm("💳 Deseja adicionar +100 créditos via Pix?");
+  if (confirmar) {
+    valorAtual += 100;
+    creditos.value = valorAtual;
+    alert("✅ Créditos adicionados com sucesso!");
   }
 }
