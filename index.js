@@ -110,9 +110,9 @@ function multiplicador() {
       derrotasConsecutivas++;
       if (derrotasConsecutivas >= 10) {
         mostrarGif("./images/giphy004.gif");
+        derrotasConsecutivas = 0;
       } else {
         mostrarGif("./images/giphy001.gif");
-        derrotasConsecutivas = 0;
       }
     }
 
