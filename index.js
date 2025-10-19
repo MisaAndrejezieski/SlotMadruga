@@ -97,14 +97,14 @@ function multiplicador() {
       divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
-      gifContainer.innerHTML = `<img src="./images/giphy002.gif" class="gif-feedback">`;
+      gifContainer.innerHTML = `<img src="./images/010.webp" class="gif-feedback">`;
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
       derrotasConsecutivas++;
       gifContainer.innerHTML = derrotasConsecutivas >= 10
         ? `<img src="./images/giphy004.gif" class="gif-feedback">`
-        : `<img src="./images/giphy003.gif" class="gif-feedback">`;
+        : `<img src="./images/giphy001.gif" class="gif-feedback">`;
     }
 
     localStorage.setItem("derrotas", derrotasConsecutivas);
