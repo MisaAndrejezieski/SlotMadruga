@@ -6,7 +6,7 @@ function multiplicador() {
         "./images/a007.png", "./images/a008.png", "./images/a009.png",
         "./images/a010.png", "./images/a011.png",
     ];
-    var pesos = [0.8, 0.8, 0.8, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.10, 0.10];
+    var pesos = [0.8, 0.8, 0.8, 0.7, 0.75, 0.7, 0.6, 0.5, 0.4, 0.4, 0.4];
     var multiplicadores = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6];
     var resultados = [];
 
