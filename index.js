@@ -5,8 +5,8 @@ function multiplicador() {
         "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
         "./images/a007.gif", "./images/a008.gif", "./images/a009.gif",
     ];
-    var pesos = [0.9, 0.8, 0.7, 0.78, 0.75, 0.73, 0.7, 0.5, 0.6, 0.4, 0.3];
-    var multiplicadores = [2, 2, 2, 2, 4, 4, 4, 4, 6, 6, 10];
+    var pesos = [0.9, 0.8, 0.7, 0.78, 0.75, 0.73, 0.7, 0.5, 0.6];
+    var multiplicadores = [2, 2, 4, 4, 4, 4, 6, 6, 10];
     var resultados = [];
 
     var divImagens = document.querySelector(".images");
