@@ -1,10 +1,10 @@
 :root {
-  --cor-fundo: linear-gradient(135deg, #1a1a1a, #333);
+  --cor-fundo: linear-gradient(135deg, #413e3e, #838181);
   --cor-texto: #fff;
   --cor-destaque: #ffcc00;
   --cor-vitoria: #27ae60;
   --cor-derrota: #c0392b;
-  --cor-fundo-transparente: rgb(252, 247, 247);
+  --cor-fundo-transparente: rgb(8, 8, 8);
   --tamanho-slot: 90px;
 }
 
@@ -40,7 +40,7 @@ html, body {
 .containerContents {
   position: relative;
   z-index: 1;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(8, 8, 8, 0.8);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   width: 90%;
