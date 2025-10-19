@@ -5,11 +5,12 @@ function multiplicador() {
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
     "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
-    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
+    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif",
+    "./images/stella-cute.gif", "./images/a011.gif",
   ];
 
-  const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
-  const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
+  const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 0.6, 0.5];
+  const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2, 2];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
