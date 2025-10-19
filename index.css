@@ -4,7 +4,6 @@
   --cor-destaque: #ffcc00;
   --cor-vitoria: #27ae60;
   --cor-derrota: #c0392b;
-  --cor-fundo-transparente: rgba(0, 0, 0, 0.8);
   --tamanho-slot: 90px;
 }
 
@@ -22,7 +21,6 @@ html, body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: none;
   position: relative;
 }
 
@@ -55,7 +53,6 @@ html, body {
   margin: 0;
   font-size: 2rem;
   color: var(--cor-destaque);
-  text-align: center;
 }
 
 #results {
@@ -83,16 +80,18 @@ html, body {
   border: 2px solid var(--cor-destaque);
   background: rgba(255,255,255,0.1);
   object-fit: contain;
-  transition: transform 0.1s;
+  transition: transform 0.5s ease-in-out, filter 0.2s;
 }
 
 .slots.rodando {
-  animation: spin 0.1s linear infinite;
+  animation: girarSlot 0.2s linear infinite;
+  filter: blur(2px);
 }
 
-@keyframes spin {
-  0% { transform: rotateX(0deg); }
-  100% { transform: rotateX(360deg); }
+@keyframes girarSlot {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
 
 .slots.ganhou {
@@ -109,15 +108,24 @@ button {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s;
+  margin: 5px;
 }
 
 button:hover {
   background: #ffdd33;
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 button:active {
   transform: translateY(0);
+}
+
+button.comprar {
+  background: #27ae60;
+}
+
+button.comprar:hover {
+  background: #2ecc71;
 }
 
 .credits {
