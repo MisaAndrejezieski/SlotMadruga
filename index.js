@@ -1,8 +1,8 @@
 function multiplicador() {
     const quantidadeDeSlot = 9;
     var imagens = [
-        "./images/a001.jpg", "./images/a002.jpg", "./images/a003.jpg",
-        "./images/a004.jpg", "./images/a005.png", "./images/a006.png",
+        "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
+        "./images/a004.gif", "./images/a005.png", "./images/a006.png",
         "./images/a007.png", "./images/a008.png", "./images/a009.png",
         "./images/a010.png", "./images/a011.png",
     ];
