@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Slot Anime</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎰 Slot Anime 🎰</title>
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
   <div class="container">
     <div class="containerContents">
-      <div class="title"><h2>🎰 Slot Anime 🎰</h2></div>
+      <div class="title">
+        <h2>🎰 Slot Anime 🎰</h2>
+      </div>
+
       <div id="results">Boa sorte!</div>
 
       <div class="images">
-        <img class="slots slot-1" src="./images/a001.gif">
-        <img class="slots slot-2" src="./images/a002.gif">
-        <img class="slots slot-3" src="./images/a003.gif">
-        <img class="slots slot-4" src="./images/a004.gif">
-        <img class="slots slot-5" src="./images/a005.gif">
-        <img class="slots slot-6" src="./images/a006.gif">
-        <img class="slots slot-7" src="./images/a007.gif">
-        <img class="slots slot-8" src="./images/a008.gif">
-        <img class="slots slot-9" src="./images/a009.gif">
+        <img class="slots slot-1" src="./images/a001.gif" alt="slot">
+        <img class="slots slot-2" src="./images/a002.gif" alt="slot">
+        <img class="slots slot-3" src="./images/a003.gif" alt="slot">
+        <img class="slots slot-4" src="./images/a004.gif" alt="slot">
+        <img class="slots slot-5" src="./images/a005.gif" alt="slot">
+        <img class="slots slot-6" src="./images/a006.gif" alt="slot">
+        <img class="slots slot-7" src="./images/a007.gif" alt="slot">
+        <img class="slots slot-8" src="./images/a008.gif" alt="slot">
+        <img class="slots slot-9" src="./images/a009.gif" alt="slot">
       </div>
 
-      <div class="actions">
-        <button id="btn-spin">Jogar</button>
-        <button id="btn-buy" class="comprar">💵 Comprar Créditos</button>
+      <div class="controls">
+        <div class="credits">
+          <label>Créditos:</label>
+          <input type="number" id="creditos" value="100" readonly />
+        </div>
       </div>
 
-      <div class="credits">
-        <label for="credits">Créditos:</label>
-        <input type="number" id="credits" value="100" readonly>
+      <div class="buttons">
+        <button id="btnJogar" onclick="multiplicador()">Jogar</button>
+        <button id="btnComprar" onclick="comprarCreditos()">💵 Comprar Créditos</button>
       </div>
     </div>
   </div>
 
-  <div id="gifContainer" class="gif-container"></div>
+  <div class="gif-container" id="gifContainer"></div>
+
   <script src="index.js"></script>
 </body>
 </html>
