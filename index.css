@@ -1,96 +1,59 @@
-/* Variáveis CSS para cores e tamanhos */
 :root {
     --cor-fundo: linear-gradient(135deg, #1a1a1a, #333);
     --cor-texto: #fff;
     --cor-destaque: #ffcc00;
     --cor-vitoria: #27ae60;
     --cor-derrota: #c0392b;
-    --cor-sombra: rgba(0, 0, 0, 0.5);
-    --cor-fundo-transparente: rgba(0, 0, 0, 0.8);
-    --tamanho-fonte-titulo: 2.5rem;
-    --tamanho-fonte-texto: 1.2rem;
-    --tamanho-slot: 100px;
-    --tamanho-slot-mobile: 80px;
 }
 
-/* Reset básico */
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+    font-family: 'Roboto', sans-serif;
     background: var(--cor-fundo);
     color: var(--cor-texto);
-    overflow: auto;
 }
 
-/* Contêiner principal */
 .container {
-    position: relative;
-    width: 100%;
-    min-height: 100vh; /* altura total da janela */
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* impede scroll causado por background */
-
-    /* remove o antigo background direto */
-    background: none;
+    min-height: 100vh;
+    position: relative;
 }
 
 .container::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('./images/alice-hana.gif');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    z-index: 0; /* fica atrás do conteúdo */
-    filter: brightness(0.5); /* escurece um pouco o gif para o conteúdo ficar legível */
+    inset: 0;
+    background: url('./images/alice-hana.gif') center/cover no-repeat;
+    filter: brightness(0.5);
+    z-index: 0;
 }
 
 .containerContents {
     position: relative;
     z-index: 1;
-}
-
-
-/* Conteúdo do contêiner */
-.containerContents {
-    background: rgba(0, 0, 0, 0.8);
-    -webkit-backdrop-filter: blur(10px); /* Prefixo para Safari e iOS */
-    backdrop-filter: blur(10px); /* Padrão para outros navegadores */
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 20px;
     text-align: center;
+    max-width: 500px;
+    width: 100%;
 }
 
-
-/* Título do jogo */
 .title h2 {
-    font-size: var(--tamanho-fonte-titulo);
-    margin: 0;
     color: var(--cor-destaque);
-    text-shadow: 0 0 10px var(--cor-destaque), 0 0 20px var(--cor-destaque);
+    text-shadow: 0 0 10px var(--cor-destaque);
 }
 
-/* Área de resultados */
 #results {
     margin: 20px 0;
     padding: 15px;
-    font-size: var(--tamanho-fonte-texto);
-    background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    color: var(--cor-texto);
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    transition: background 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 #results.won {
@@ -103,23 +66,17 @@ html, body {
     animation: shake 0.5s ease;
 }
 
-/* Animação de pulso para vitória */
 @keyframes pulse {
-    0% { transform: scale(1); }
+    0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
 }
 
-/* Animação de tremor para derrota */
 @keyframes shake {
-    0% { transform: translateX(0); }
+    0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
-    100% { transform: translateX(0); }
+    75% { transform: translateX(10px); }
 }
 
-/* Área das imagens dos slots */
 .images {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -127,45 +84,33 @@ html, body {
     margin: 20px 0;
 }
 
-/* Estilo para os slots */
 .slots {
-    width: var(--tamanho-slot);
-    height: var(--tamanho-slot);
-    object-fit: contain;
+    width: 100px;
+    height: 100px;
     border: 2px solid var(--cor-destaque);
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Animação de rotação dos slots */
-@keyframes spin {
-    0% { transform: rotateX(0deg); }
-    100% { transform: rotateX(360deg); }
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .slots.rodando {
-    animation: spin 0.5s linear infinite;
+    animation: spin 0.4s linear infinite;
 }
 
-/* Efeito de hover nos slots */
-.slots:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px var(--cor-destaque);
+@keyframes spin {
+    from { transform: rotateX(0deg); }
+    to { transform: rotateX(360deg); }
 }
 
-/* Estilo para os slots ganhadores */
 .slots.ganhou {
-    border: 4px solid var(--cor-vitoria);
+    border: 3px solid var(--cor-vitoria);
     box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
-/* Área de controle (créditos, aposta, ganhos, jogadas) */
 .controls {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin: 20px 0;
 }
 
 .credits, .bet, .winnings, .plays {
@@ -177,69 +122,56 @@ html, body {
     border-radius: 10px;
 }
 
-.credits label, .bet label, .winnings label, .plays label {
-    font-weight: bold;
+label {
     color: var(--cor-destaque);
 }
 
-.credits input, .bet input, .winnings input, .plays input {
-    width: 60%;
-    padding: 5px;
-    text-align: right;
+input {
     background: transparent;
     border: none;
     color: var(--cor-texto);
-    font-size: 1rem;
+    width: 60%;
+    text-align: right;
 }
 
-/* Botão de jogar */
 button {
-    margin: 20px 0;
-    padding: 15px 30px;
+    margin-top: 20px;
+    padding: 12px 30px;
     background: var(--cor-destaque);
-    color: #1a1a1a;
+    color: #000;
     border: none;
     border-radius: 10px;
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 button:hover {
     background: #ffdd33;
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
-button:active {
-    transform: translateY(0);
+/* GIF Overlay */
+#gif-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
 }
 
-/* Responsividade */
-@media screen and (max-width: 767.98px) {
-    .containerContents {
-        width: 100%;
-        padding: 10px;
-    }
-
-    .slots {
-        width: var(--tamanho-slot-mobile);
-        height: var(--tamanho-slot-mobile);
-    }
-
-    button {
-        padding: 10px 20px;
-        font-size: 1rem;
-    }
+#gif-overlay.show {
+    opacity: 1;
+    pointer-events: all;
 }
 
-@media screen and (min-width: 768px) {
-    .containerContents {
-        width: 500px;
-    }
-
-    .slots {
-        width: var(--tamanho-slot);
-        height: var(--tamanho-slot);
-    }
+#gif-display {
+    max-width: 60%;
+    border-radius: 20px;
 }
