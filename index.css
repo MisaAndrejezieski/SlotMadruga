@@ -91,7 +91,7 @@ html, body {
 
 /* Giro suave com leve oscilação */
 .rodando-suave {
-  animation: giroSuave 0.15s linear infinite;
+  animation: giroSuave 0.50s linear infinite;
 }
 
 @keyframes giroSuave {
