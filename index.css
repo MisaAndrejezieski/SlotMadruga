@@ -1,98 +1,59 @@
-/* 🎰 Tema e variáveis principais */
 :root {
     --cor-fundo: linear-gradient(135deg, #1a1a1a, #333);
     --cor-texto: #fff;
     --cor-destaque: #ffcc00;
     --cor-vitoria: #27ae60;
     --cor-derrota: #c0392b;
-    --tamanho-fonte-titulo: 2.2rem;
-    --tamanho-fonte-texto: 1.1rem;
-
-    /* Tamanho dos slots responsivo */
-    --tamanho-slot: clamp(65px, 8vw, 90px);
 }
 
-/* 🔧 Reset */
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+    font-family: 'Roboto', sans-serif;
     background: var(--cor-fundo);
     color: var(--cor-texto);
-    /* permitimos scroll na página caso necessário */
-    overflow: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
-/* 🪞 Container principal */
 .container {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: none;
-    padding: 20px; /* garante margem em telas pequenas */
-    box-sizing: border-box;
+    min-height: 100vh;
+    position: relative;
 }
 
 .container::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url('./images/alice-hana.gif');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    z-index: 0;
+    background: url('./images/alice-hana.gif') center/cover no-repeat;
     filter: brightness(0.5);
+    z-index: 0;
 }
 
-/* 🧱 Bloco de conteúdo: altura limitada e rolagem interna quando necessário */
 .containerContents {
     position: relative;
     z-index: 1;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    width: 100%;
-    max-width: 420px;
-    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 20px;
     text-align: center;
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    /* Limita a altura para não ultrapassar a viewport e permite scroll interno */
-    max-height: calc(100vh - 40px);
-    overflow: auto;
-    box-sizing: border-box;
+    max-width: 500px;
+    width: 100%;
 }
 
-/* 🏷️ Título */
 .title h2 {
-    font-size: var(--tamanho-fonte-titulo);
-    margin: 5px 0 8px;
     color: var(--cor-destaque);
-    text-shadow: 0 0 10px var(--cor-destaque), 0 0 20px var(--cor-destaque);
+    text-shadow: 0 0 10px var(--cor-destaque);
 }
 
-/* 🧾 Resultados */
 #results {
-    margin: 8px 0;
-    padding: 10px;
-    font-size: var(--tamanho-fonte-texto);
-    background: rgba(255, 255, 255, 0.08);
+    margin: 20px 0;
+    padding: 15px;
     border-radius: 10px;
-    color: var(--cor-texto);
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    transition: background 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 #results.won {
@@ -105,51 +66,40 @@ html, body {
     animation: shake 0.5s ease;
 }
 
-/* ✨ Animações */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-    100% { transform: scale(1); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
 @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    50% { transform: translateX(8px); }
-    75% { transform: translateX(-8px); }
-    100% { transform: translateX(0); }
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
 }
 
-/* 🎰 Área dos slots
-   -> Definimos flex: 0 0 auto para evitar que grid expanda e empurre o botão. */
 .images {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    justify-items: center;
-    align-items: center;
-    margin: 6px 0;
-    flex: 0 0 auto;
+    gap: 10px;
+    margin: 20px 0;
 }
 
-/* 🎞️ Slots individuais */
 .slots {
-    width: var(--tamanho-slot);
-    height: var(--tamanho-slot);
-    object-fit: contain;
+    width: 100px;
+    height: 100px;
     border: 2px solid var(--cor-destaque);
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.06);
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
-}
-
-.slots:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 10px var(--cor-destaque);
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .slots.rodando {
-    animation: spin 0.45s linear infinite;
+    animation: spin 0.4s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotateX(0deg); }
+    to { transform: rotateX(360deg); }
 }
 
 .slots.ganhou {
@@ -157,59 +107,44 @@ html, body {
     box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
-/* 🎡 Animação de rotação */
-@keyframes spin {
-    0% { transform: rotateX(0deg); }
-    100% { transform: rotateX(360deg); }
-}
-
-/* 🎮 Controles */
 .controls {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin: 6px 0;
-    flex: 0 0 auto;
+    gap: 10px;
 }
 
 .credits, .bet, .winnings, .plays {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.06);
-    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
     border-radius: 10px;
 }
 
-.credits label, .bet label, .winnings label, .plays label {
-    font-weight: bold;
+label {
     color: var(--cor-destaque);
 }
 
-.credits input, .bet input, .winnings input, .plays input {
-    width: 60%;
-    padding: 5px;
-    text-align: right;
+input {
     background: transparent;
     border: none;
     color: var(--cor-texto);
-    font-size: 1rem;
+    width: 60%;
+    text-align: right;
 }
 
-/* 🟡 Botão de jogar
-   -> Garantimos que o botão seja sempre visível; posição natural dentro do fluxo. */
 button {
-    margin-top: 6px;
-    padding: 12px 22px;
+    margin-top: 20px;
+    padding: 12px 30px;
     background: var(--cor-destaque);
-    color: #1a1a1a;
+    color: #000;
     border: none;
     border-radius: 10px;
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.18s ease;
-    flex: 0 0 auto;
+    transition: all 0.3s ease;
 }
 
 button:hover {
@@ -217,23 +152,26 @@ button:hover {
     transform: translateY(-3px);
 }
 
-button:active {
-    transform: translateY(0);
+/* GIF Overlay */
+#gif-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
 }
 
-/* 📱 Responsividade */
-@media screen and (max-width: 767.98px) {
-    .containerContents {
-        max-width: 98%;
-        padding: 10px;
-    }
+#gif-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+}
 
-    #results {
-        font-size: 1rem;
-    }
-
-    button {
-        padding: 10px 18px;
-        font-size: 1rem;
-    }
+#gif-display {
+    max-width: 60%;
+    border-radius: 20px;
 }
