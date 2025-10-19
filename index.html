@@ -12,7 +12,7 @@
         <div class="containerContents">
             <!-- Título do jogo -->
             <div class="title">
-                <h2>Anime hot girl</h2>
+                <h2>Anime Slot Machine</h2>
             </div>
 
             <!-- Área de resultados -->
@@ -31,7 +31,7 @@
                 <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9">
             </div>
 
-            <!-- Área de controle (créditos, aposta, ganhos, jogadas) -->
+            <!-- Área de controle -->
             <div class="controls">
                 <div class="credits">
                     <label for="creditos">Créditos: </label>
@@ -41,12 +41,10 @@
                     <label for="aposta">Aposta: </label>
                     <input type="number" id="aposta" value="1" min="1" max="10">
                 </div>
-
-            <div class="winnings">
+                <div class="winnings">
                     <label for="ganhos">Ganhos: </label>
                     <input type="number" id="ganhos" value="0" readonly>
                 </div>
-
                 <div class="plays">
                     <label for="jogadas">Jogadas: </label>
                     <input type="number" id="jogadas" value="0" readonly>
@@ -58,7 +56,12 @@
         </div>
     </div>
 
-    <!-- Script do jogo -->
+    <!-- Overlay dos GIFs -->
+    <div id="gif-overlay" class="hidden">
+        <img id="gif-display" src="" alt="gif de resultado">
+    </div>
+
+    <!-- Script -->
     <script src="index.js"></script>
 </body>
 </html>
