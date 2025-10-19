@@ -5,7 +5,7 @@ function multiplicador() {
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
     "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
-    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.webp",
+    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/tumblr_d35aa4a352f1b995567ad108934ae79d_ad56f61e_540.webp",
   ];
   const pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 10];
   const multiplicadores = [10, 2, 2, 4, 4, 4, 4, 6, 6, 2];
@@ -103,7 +103,7 @@ function multiplicador() {
       ganhos.value = ganhoTotal;
       divResultado.innerHTML = "Você ganhou " + ganhoTotal + " créditos!";
       divResultado.classList = 'won';
-      mostrarGif("./images/giphy002.gif");
+      mostrarGif("./images/a010.webp");
 
       slotsGanhadores.forEach(indice => {
         const slotGanhador = document.querySelector(`.slot-${indice + 1}`);
@@ -117,7 +117,7 @@ function multiplicador() {
       if (derrotasSeguidas >= 10) {
         mostrarGif("./images/giphy004.gif");
       } else {
-        mostrarGif("./images/giphy003.gif");
+        mostrarGif("./images/giphy001.gif");
       }
     }
 
