@@ -74,7 +74,7 @@ html, body {
 
 .images {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 8px;
   margin: 10px 0;
 }
@@ -86,12 +86,12 @@ html, body {
   border: 2px solid var(--cor-destaque);
   background: rgba(255,255,255,0.1);
   object-fit: contain;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 /* Giro suave com leve oscilação */
 .rodando-suave {
-  animation: giroSuave 0.50s linear infinite;
+  animation: giroSuave 0.40s linear infinite;
 }
 
 @keyframes giroSuave {
