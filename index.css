@@ -27,15 +27,22 @@ html, body {
 /* Contêiner principal */
 .container {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh; /* garante altura total da janela */
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('./images/68ebd3678c88a3c1f618f441.mp4') no-repeat center center fixed;
-    background-size: cover;
-    padding: 20px;
-    box-sizing: border-box;
+
+    /* Fundo do GIF */
+    background-image: url('./images/insomnia-chan-hot.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover; /* cobre toda a área sem distorcer */
+    background-attachment: fixed; /* mantém o gif fixo ao rolar */
+
+    /* Camada extra de correção */
+    background-color: #000; /* caso o gif não carregue */
 }
+
 
 /* Conteúdo do contêiner */
 .containerContents {
