@@ -1,59 +1,89 @@
+/* 🎰 Tema e variáveis principais */
 :root {
     --cor-fundo: linear-gradient(135deg, #1a1a1a, #333);
     --cor-texto: #fff;
     --cor-destaque: #ffcc00;
     --cor-vitoria: #27ae60;
     --cor-derrota: #c0392b;
+    --tamanho-fonte-titulo: 2.2rem;
+    --tamanho-fonte-texto: 1.1rem;
+
+    /* O tamanho dos slots agora se ajusta dinamicamente */
+    --tamanho-slot: clamp(65px, 8vw, 90px);
 }
 
+/* 🔧 Reset */
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
     background: var(--cor-fundo);
     color: var(--cor-texto);
+    overflow: hidden; /* evita rolagem */
 }
 
+/* 🪞 Container principal */
 .container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    position: relative;
+    background: none;
+    overflow: hidden;
 }
 
 .container::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: url('./images/alice-hana.gif') center/cover no-repeat;
-    filter: brightness(0.5);
+    background-image: url('./images/alice-hana.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     z-index: 0;
+    filter: brightness(0.5);
 }
 
+/* 🧱 Bloco de conteúdo */
 .containerContents {
     position: relative;
     z-index: 1;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
-    max-width: 500px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     width: 100%;
+    max-width: 400px;
+    padding: 15px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-height: 95vh;
 }
 
+/* 🏷️ Título */
 .title h2 {
+    font-size: var(--tamanho-fonte-titulo);
+    margin: 5px 0 10px;
     color: var(--cor-destaque);
-    text-shadow: 0 0 10px var(--cor-destaque);
+    text-shadow: 0 0 10px var(--cor-destaque), 0 0 20px var(--cor-destaque);
 }
 
+/* 🧾 Resultados */
 #results {
-    margin: 20px 0;
-    padding: 15px;
-    border-radius: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: var(--tamanho-fonte-texto);
     background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--cor-texto);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    transition: background 0.3s ease;
 }
 
 #results.won {
@@ -66,40 +96,50 @@ html, body {
     animation: shake 0.5s ease;
 }
 
+/* ✨ Animações */
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
+    0% { transform: scale(1); }
     50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+    100% { transform: translateX(0); }
 }
 
+/* 🎰 Área dos slots */
 .images {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin: 20px 0;
+    gap: 8px;
+    justify-items: center;
+    align-items: center;
+    margin: 10px 0;
+    flex-grow: 1;
 }
 
+/* 🎞️ Slots individuais */
 .slots {
-    width: 100px;
-    height: 100px;
+    width: var(--tamanho-slot);
+    height: var(--tamanho-slot);
+    object-fit: contain;
     border: 2px solid var(--cor-destaque);
     border-radius: 10px;
-    object-fit: contain;
-    background: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slots:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px var(--cor-destaque);
 }
 
 .slots.rodando {
-    animation: spin 0.4s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotateX(0deg); }
-    to { transform: rotateX(360deg); }
+    animation: spin 0.5s linear infinite;
 }
 
 .slots.ganhou {
@@ -107,10 +147,18 @@ html, body {
     box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
+/* 🎡 Animação de rotação */
+@keyframes spin {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(360deg); }
+}
+
+/* 🎮 Controles */
 .controls {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    margin: 8px 0;
 }
 
 .credits, .bet, .winnings, .plays {
@@ -118,33 +166,37 @@ html, body {
     justify-content: space-between;
     align-items: center;
     background: rgba(255, 255, 255, 0.1);
-    padding: 10px;
+    padding: 8px;
     border-radius: 10px;
 }
 
-label {
+.credits label, .bet label, .winnings label, .plays label {
+    font-weight: bold;
     color: var(--cor-destaque);
 }
 
-input {
+.credits input, .bet input, .winnings input, .plays input {
+    width: 60%;
+    padding: 5px;
+    text-align: right;
     background: transparent;
     border: none;
     color: var(--cor-texto);
-    width: 60%;
-    text-align: right;
+    font-size: 1rem;
 }
 
+/* 🟡 Botão de jogar */
 button {
-    margin-top: 20px;
-    padding: 12px 30px;
+    margin-top: 10px;
+    padding: 12px 25px;
     background: var(--cor-destaque);
-    color: #000;
+    color: #1a1a1a;
     border: none;
     border-radius: 10px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
 button:hover {
@@ -152,26 +204,23 @@ button:hover {
     transform: translateY(-3px);
 }
 
-/* GIF Overlay */
-#gif-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
+button:active {
+    transform: translateY(0);
 }
 
-#gif-overlay.show {
-    opacity: 1;
-    pointer-events: all;
-}
+/* 📱 Responsividade */
+@media screen and (max-width: 767.98px) {
+    .containerContents {
+        max-width: 95%;
+        padding: 10px;
+    }
 
-#gif-display {
-    max-width: 60%;
-    border-radius: 20px;
+    #results {
+        font-size: 1rem;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
 }
