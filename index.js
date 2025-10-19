@@ -19,9 +19,9 @@ function multiplicador() {
     // GIFs
     const gifContainer = document.getElementById("gif-container");
     const gifDisplay = document.getElementById("gif-display");
-    const gifVitoria = "./images/gif-vitoria.gif";
-    const gifDerrota = "./images/gif-derrota.gif";
-    const gifDerrota10 = "./images/gif-derrota10.gif";
+    const gifVitoria = "./images/giphy002.gif";
+    const gifDerrota = "./images/giphy003.gif";
+    const gifDerrota10 = "./images/giphy004.gif";
     let contadorDerrotas = window.contadorDerrotas || 0;
 
     function mostrarGif(tipo) {
@@ -142,6 +142,9 @@ function multiplicador() {
             divResultado.innerHTML = "Mais sorte na próxima vez!";
             divResultado.classList = 'lost';
             mostrarGif("derrota");
+            if(derrotas>=10){
+                divResumostrarGif("derrota");ltado.innerHTML = "Você perdeu 10 vezes seguidas!";
+            }
         }
 
         if (creditosValor <= 0) {
