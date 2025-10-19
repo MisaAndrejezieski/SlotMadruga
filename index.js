@@ -109,7 +109,7 @@ function multiplicador() {
       if (derrotasConsecutivas >= 10) {
         gifContainer.innerHTML = `<img src="./images/giphy004.gif" class="gif-feedback">`;
       } else {
-        gifContainer.innerHTML = `<img src="./images/giphy003.gif" class="gif-feedback">`;
+        gifContainer.innerHTML = `<img src="./images/giphy001.gif" class="gif-feedback">`;
       }
     }
 
