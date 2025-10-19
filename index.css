@@ -88,7 +88,7 @@ html, body {
 
 /* Giro elegante */
 .rodando-suave {
-  animation: giroSuave 0.2s linear infinite;
+  animation: giroSuave 0.5s linear infinite;
 }
 
 @keyframes giroSuave {
@@ -110,7 +110,7 @@ button {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.5s;
 }
 
 button:hover {
