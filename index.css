@@ -4,7 +4,7 @@
   --cor-destaque: #ffcc00;
   --cor-vitoria: #27ae60;
   --cor-derrota: #c0392b;
-  --cor-fundo-transparente: rgba(0, 0, 0, 0.8);
+  --cor-fundo-transparente: rgb(172, 168, 168);
   --tamanho-slot: 90px;
 }
 
