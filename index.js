@@ -1,6 +1,6 @@
 function multiplicador() {
   const quantidadeDeSlot = 9;
-  const apostaFixa = 10; // Valor fixo de aposta
+  const apostaFixa = 10;
 
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
@@ -20,27 +20,23 @@ function multiplicador() {
   let resultados = [];
   let derrotasConsecutivas = parseInt(localStorage.getItem("derrotas") || "0");
 
-  // Verifica créditos
   if (apostaFixa > creditosValor) {
     divResultado.textContent = "Créditos insuficientes!";
     divResultado.classList = 'lost';
     return;
   }
 
-  // Deduz aposta
   creditosValor -= apostaFixa;
   creditos.value = creditosValor;
 
   divResultado.textContent = "Rodando...";
   divResultado.classList = "";
 
-  document.querySelectorAll(".slots").forEach(slot => {
-    slot.classList.remove("ganhou");
-    slot.classList.add("rodando");
-  });
+  const slots = document.querySelectorAll(".slots");
+  slots.forEach(slot => slot.classList.add("rodando"));
 
   const intervaloRodando = setInterval(() => {
-    document.querySelectorAll(".slots").forEach(slot => {
+    slots.forEach(slot => {
       const aleatorio = selecionarImagemComPeso();
       slot.src = imagens[aleatorio];
     });
@@ -48,10 +44,10 @@ function multiplicador() {
 
   setTimeout(() => {
     clearInterval(intervaloRodando);
-    document.querySelectorAll(".slots").forEach(slot => slot.classList.remove("rodando"));
+    slots.forEach(slot => slot.classList.remove("rodando"));
     definirResultados();
     verifiqueSeGanhou();
-  }, 2500);
+  }, 2000);
 
   function selecionarImagemComPeso() {
     const totalPesos = pesos.reduce((a, b) => a + b, 0);
@@ -74,8 +70,8 @@ function multiplicador() {
 
   function verifiqueSeGanhou() {
     const linhasVencedoras = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // linhas
-      [0, 4, 8], [2, 4, 6] // diagonais
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 4, 8], [2, 4, 6]
     ];
 
     let ganhoTotal = 0;
@@ -86,8 +82,7 @@ function multiplicador() {
       const [a, b, c] = linha;
       if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
         const indiceImagem = imagens.indexOf(resultados[a]);
-        const multiplicador = multiplicadores[indiceImagem];
-        ganhoTotal += apostaFixa * multiplicador;
+        ganhoTotal += apostaFixa * multiplicadores[indiceImagem];
         ganhou = true;
         linha.forEach(i => slotsGanhadores.add(i));
       }
@@ -101,16 +96,14 @@ function multiplicador() {
       divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
-      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback">`;
+      gifContainer.innerHTML = `<img src="./images/giphy002.gif" class="gif-feedback">`;
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
       derrotasConsecutivas++;
-      if (derrotasConsecutivas >= 10) {
-        gifContainer.innerHTML = `<img src="./images/giphy004.gif" class="gif-feedback">`;
-      } else {
-        gifContainer.innerHTML = `<img src="./images/giphy001.gif" class="gif-feedback">`;
-      }
+      gifContainer.innerHTML = derrotasConsecutivas >= 10
+        ? `<img src="./images/giphy004.gif" class="gif-feedback">`
+        : `<img src="./images/giphy003.gif" class="gif-feedback">`;
     }
 
     localStorage.setItem("derrotas", derrotasConsecutivas);
@@ -119,4 +112,12 @@ function multiplicador() {
       document.querySelector(`.slot-${i + 1}`).classList.add("ganhou");
     });
   }
+}
+
+function comprarCreditos() {
+  const valor = prompt("Digite quantos créditos deseja comprar:");
+  if (!valor || isNaN(valor) || valor <= 0) return;
+  const creditos = document.getElementById("creditos");
+  creditos.value = parseInt(creditos.value) + parseInt(valor);
+  alert(`Você comprou ${valor} créditos!`);
 }
