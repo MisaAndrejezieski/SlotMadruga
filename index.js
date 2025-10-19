@@ -3,7 +3,7 @@ function multiplicador() {
     var imagens = [
         "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
         "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
-        "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.gif", 
+        "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/a010.webp", 
     ];
     var pesos = [0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.5, 0.5, 10];
     var multiplicadores = [10,2, 2, 4, 4, 4, 4, 6, 6, 10, 10];
