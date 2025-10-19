@@ -97,7 +97,7 @@ function multiplicador() {
       divResultado.textContent = `Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
-      gifContainer.innerHTML = `<img src="./images/010.webp" class="gif-feedback">`;
+      gifContainer.innerHTML = `<img src="./images/a010.webp" class="gif-feedback">`;
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
