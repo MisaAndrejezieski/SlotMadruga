@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="index.css">
   <title>Slot Anime</title>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <div class="container">
     <div class="containerContents">
-      <!-- Título do jogo -->
+      <!-- Título -->
       <div class="title">
         <h2>Slot Anime</h2>
       </div>
 
-      <!-- Área de resultados -->
+      <!-- Resultado -->
       <div id="results">Jogar</div>
 
-      <!-- Área das imagens dos slots -->
+      <!-- Área dos Slots -->
       <div class="images">
         <img class="slots slot-1" src="./images/a001.gif" alt="Slot 1">
         <img class="slots slot-2" src="./images/a002.gif" alt="Slot 2">
@@ -31,15 +31,15 @@
         <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9">
       </div>
 
-      <!-- Área de controle -->
+      <!-- Controles -->
       <div class="controls">
         <div class="credits">
           <label for="creditos">Créditos:</label>
-          <input type="number" id="creditos" value="100" readonly>
+          <input type="number" id="creditos" value="10000" readonly>
         </div>
         <div class="bet">
           <label for="aposta">Aposta:</label>
-          <input type="number" id="aposta" value="10" min="1" max="100">
+          <input type="number" id="aposta" value="1" min="1" max="10">
         </div>
         <div class="winnings">
           <label for="ganhos">Ganhos:</label>
@@ -51,15 +51,14 @@
         </div>
       </div>
 
-      <!-- Botão para jogar -->
-      <button type="button" id="botao" onclick="multiplicador();">Jogar</button>
+      <!-- Botão -->
+      <button type="button" id="botao" onclick="multiplicador()">Jogar</button>
     </div>
 
-    <!-- Área de exibição dos GIFs -->
-    <div id="feedback-gif-container"></div>
+    <!-- GIFs de feedback -->
+    <div id="gifFeedback" class="gifFeedback"></div>
   </div>
 
-  <!-- Script do jogo -->
   <script src="index.js"></script>
 </body>
 </html>

@@ -69,7 +69,7 @@ function multiplicador() {
       results.textContent = "Você ganhou!";
       results.classList.add('won');
 
-      mostrarGif('./images/win.gif');
+      mostrarGif('./images/giphy003.gif');
     } else {
       ganhos.value = 0;
       results.textContent = "Você perdeu!";
@@ -77,9 +77,9 @@ function multiplicador() {
       derrotasConsecutivas++;
 
       if (derrotasConsecutivas >= 10) {
-        mostrarGif('./images/losestreak.gif');
+        mostrarGif('./images/giphy001.gif');
       } else {
-        mostrarGif('./images/lose.gif');
+        mostrarGif('./images/giphy004.gif');
       }
     }
   }, 2000);
