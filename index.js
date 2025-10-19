@@ -103,7 +103,7 @@ function multiplicador() {
       divResultado.textContent = `🎉 Você ganhou ${ganhoTotal} créditos!`;
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
-      mostrarGif("./images/giphy002.gif");
+      mostrarGif("./images/010.webp");
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.classList = 'lost';
@@ -111,7 +111,7 @@ function multiplicador() {
       if (derrotasConsecutivas >= 10) {
         mostrarGif("./images/giphy004.gif");
       } else {
-        mostrarGif("./images/giphy003.gif");
+        mostrarGif("./images/giphy001.gif");
       }
     }
 
