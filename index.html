@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎰 Slot Anime 🎰</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slot Anime</title>
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
@@ -27,17 +27,20 @@
         <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9" title="Slot 9">
       </div>
 
-      <button id="spin">Jogar</button>
+      <div class="actions">
+        <button id="btn-spin">Jogar</button>
+        <button id="btn-buy" class="comprar">💵 Comprar Créditos</button>
+      </div>
 
       <div class="credits">
-        <label>Créditos:</label>
-        <input type="text" id="credits" value="100" readonly>
+        <label for="credits">Créditos:</label>
+        <input type="number" id="credits" value="100" readonly>
       </div>
     </div>
   </div>
 
-  <!-- Container de GIFs -->
-  <div class="gif-container" id="gifContainer"></div>
+  <!-- GIF de feedback no canto (não bloqueia interação) -->
+  <div id="gifContainer" class="gif-container" aria-hidden="true"></div>
 
   <script src="index.js"></script>
 </body>
