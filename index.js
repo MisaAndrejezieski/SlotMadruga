@@ -112,6 +112,7 @@ function multiplicador() {
         mostrarGif("./images/giphy004.gif");
       } else {
         mostrarGif("./images/giphy001.gif");
+        derrotasConsecutivas = 0;
       }
     }
 
