@@ -2,7 +2,7 @@
  * ========================================
  * JOGO DE SLOTS - DANDADAN
  * ========================================
- * Versão: 3.1 - GIRO VISUAL CORRIGIDO
+ * Versão: 3.2 - GIFs FICAM ATÉ PRÓXIMA JOGADA
  * ========================================
  */
 
@@ -18,7 +18,6 @@
     CHANCE_VITORIA: 0.51,
     TEMPO_GIRO: 2500,
     INTERVALO_GIRO: 60,
-    TEMPO_GIF: 4000,
     CREDITOS_INICIAIS: 100,
     COMPRA_CREDITOS: 100
   };
@@ -105,12 +104,26 @@
   DOM.creditos.value = Estado.creditosValor;
 
   // ========================================
+  // FUNÇÃO PARA LIMPAR GIF (CHAMADA NA PRÓXIMA JOGADA)
+  // ========================================
+  function limparGif() {
+    if (DOM.gifContainer) {
+      DOM.gifContainer.innerHTML = '';
+    }
+  }
+
+  // ========================================
   // FUNÇÃO PRINCIPAL
   // ========================================
   window.multiplicador = function() {
     'use strict';
 
     if (Estado.rodando) return;
+
+    // ====================================
+    // LIMPA O GIF ANTERIOR (SE EXISTIR)
+    // ====================================
+    limparGif();
 
     if (CONFIG.APOSTA_FIXA > Estado.creditosValor) {
       DOM.divResultado.textContent = '❌ Créditos insuficientes!';
@@ -336,7 +349,7 @@
       }
     }
 
-    DOM.gifContainer.innerHTML = '';
+    // NÃO LIMPA O GIF AQUI - DEIXA ELE EXIBIDO
 
     if (ganhou) {
       Estado.creditosValor += ganhoTotal;
@@ -354,6 +367,7 @@
         }
       });
 
+      // MOSTRA O GIF - ELE FICA ATÉ A PRÓXIMA JOGADA
       if (multiplicadorUsado >= 10) {
         mostrarGif(GIFS_FEEDBACK.VITORIA_PREMIUM);
       } else if (multiplicadorUsado >= 5) {
@@ -369,6 +383,7 @@
       DOM.divResultado.className = 'lost';
       Estado.derrotasConsecutivas++;
 
+      // MOSTRA O GIF - ELE FICA ATÉ A PRÓXIMA JOGADA
       if (Estado.derrotasConsecutivas >= 10) {
         mostrarGif(GIFS_FEEDBACK.DERROTA_FRUSTRANTE);
         Estado.derrotasConsecutivas = 0;
@@ -382,6 +397,9 @@
     localStorage.setItem('derrotas', Estado.derrotasConsecutivas);
   }
 
+  // ========================================
+  // MOSTRA GIF - FICA ATÉ A PRÓXIMA JOGADA
+  // ========================================
   function mostrarGif(caminho) {
     if (!DOM.gifContainer) {
       console.error('❌ Container de GIF não encontrado!');
@@ -413,11 +431,11 @@
         DOM.gifContainer.innerHTML = '';
         DOM.gifContainer.appendChild(img);
 
-        setTimeout(() => {
-          if (DOM.gifContainer) {
-            DOM.gifContainer.innerHTML = '';
-          }
-        }, CONFIG.TEMPO_GIF);
+        // ====================================
+        // REMOVE O TIMEOUT - O GIF FICA ATÉ A PRÓXIMA JOGADA
+        // ====================================
+        // O GIF será removido quando o usuário clicar em "Girar" novamente
+        // (função limparGif() é chamada no início de multiplicador())
       })
       .catch(() => {
         console.warn('⚠️ Erro ao carregar GIF, usando fallback');
@@ -431,13 +449,13 @@
           font-size: 14px;
           text-align: center;
         ">🎰 Resultado</div>`;
-        
-        setTimeout(() => {
-          DOM.gifContainer.innerHTML = '';
-        }, CONFIG.TEMPO_GIF);
+        // Também fica até a próxima jogada
       });
   }
 
+  // ========================================
+  // COMPRA DE CRÉDITOS
+  // ========================================
   window.comprarCreditos = function() {
     const confirmar = confirm('💳 Deseja adicionar +' + CONFIG.COMPRA_CREDITOS + ' créditos via Pix?');
 
@@ -471,7 +489,7 @@
     }
 
     console.log('🎰 Slot Anime - DANDADAN');
-    console.log('📊 Versão 3.1 - GIRO VISUAL CORRIGIDO');
+    console.log('📊 Versão 3.2 - GIFs FICAM ATÉ PRÓXIMA JOGADA');
     console.log('🎯 Chance de vitória: 51%');
     console.log('⭐ a003.gif e a007.gif pagam x10!');
     console.log('🚀 Jogo carregado!');
