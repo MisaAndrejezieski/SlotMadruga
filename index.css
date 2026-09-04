@@ -96,6 +96,20 @@ html, body {
   100% { transform: scale(1) rotateX(360deg); }
 }
 
+/* EFEITO DE PARADA - TREMOR */
+.parando {
+  animation: tremor 0.3s ease-in-out;
+}
+
+@keyframes tremor {
+  0% { transform: translateX(0) rotate(0deg); }
+  20% { transform: translateX(-4px) rotate(-2deg); }
+  40% { transform: translateX(4px) rotate(2deg); }
+  60% { transform: translateX(-2px) rotate(-1deg); }
+  80% { transform: translateX(2px) rotate(1deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
 .slots.ganhou {
   border: 3px solid var(--cor-vitoria);
   box-shadow: 0 0 15px var(--cor-vitoria);
@@ -126,6 +140,38 @@ button:active {
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
+}
+
+.aposta-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.aposta-container label {
+  color: var(--cor-destaque);
+  font-weight: bold;
+}
+
+.aposta-container select {
+  background: rgba(255,255,255,0.15);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-destaque);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+
+.aposta-container select option {
+  background: #1a1a1a;
+  color: var(--cor-texto);
 }
 
 .credits {
