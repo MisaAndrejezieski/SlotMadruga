@@ -2,7 +2,7 @@
  * ========================================
  * JOGO DE SLOTS - DANDADAN
  * ========================================
- * Versão: 3.2 - GIFs FICAM ATÉ PRÓXIMA JOGADA
+ * Versão: 3.3 - SLOTS RODAM DE VERDADE + GIF FICA ATÉ O FINAL DA PRÓXIMA JOGADA
  * ========================================
  */
 
@@ -16,8 +16,8 @@
     QUANTIDADE_SLOT: 9,
     APOSTA_FIXA: 10,
     CHANCE_VITORIA: 0.51,
-    TEMPO_GIRO: 2500,
-    INTERVALO_GIRO: 60,
+    TEMPO_GIRO: 3000,           // 3 segundos de giro
+    INTERVALO_GIRO: 50,         // Troca a cada 50ms (mais rápido = mais suave)
     CREDITOS_INICIAIS: 100,
     COMPRA_CREDITOS: 100
   };
@@ -98,17 +98,19 @@
     creditosValor: parseInt(DOM.creditos.value) || CONFIG.CREDITOS_INICIAIS,
     resultados: [],
     derrotasConsecutivas: parseInt(localStorage.getItem('derrotas') || '0'),
-    rodando: false
+    rodando: false,
+    gifAtual: null  // Guarda o GIF atual para manter até o final da próxima jogada
   };
 
   DOM.creditos.value = Estado.creditosValor;
 
   // ========================================
-  // FUNÇÃO PARA LIMPAR GIF (CHAMADA NA PRÓXIMA JOGADA)
+  // FUNÇÃO PARA LIMPAR GIF (APENAS NO FINAL DA PRÓXIMA JOGADA)
   // ========================================
   function limparGif() {
     if (DOM.gifContainer) {
       DOM.gifContainer.innerHTML = '';
+      Estado.gifAtual = null;
     }
   }
 
@@ -121,9 +123,9 @@
     if (Estado.rodando) return;
 
     // ====================================
-    // LIMPA O GIF ANTERIOR (SE EXISTIR)
+    // SÓ LIMPA O GIF QUANDO A JOGADA TERMINAR (NÃO NO INÍCIO)
+    // O GIF FICA EXIBIDO DURANTE TODO O GIRO
     // ====================================
-    limparGif();
 
     if (CONFIG.APOSTA_FIXA > Estado.creditosValor) {
       DOM.divResultado.textContent = '❌ Créditos insuficientes!';
@@ -142,13 +144,20 @@
     DOM.divResultado.textContent = '🎰 Girando...';
     DOM.divResultado.className = '';
 
+    // ====================================
+    // APLICA A ANIMAÇÃO DE GIRO NOS SLOTS
+    // ====================================
     DOM.slots.forEach(slot => {
       slot.classList.remove('ganhou');
       slot.classList.remove('rodando-suave');
+      // Força reflow para reiniciar animação
       void slot.offsetWidth;
       slot.classList.add('rodando-suave');
     });
 
+    // ====================================
+    // GIRO CONTÍNUO TROCANDO IMAGENS
+    // ====================================
     let contadorGiros = 0;
     const totalGiros = Math.floor(CONFIG.TEMPO_GIRO / CONFIG.INTERVALO_GIRO);
 
@@ -159,39 +168,52 @@
       });
       contadorGiros++;
 
-      if (contadorGiros >= totalGiros - 8) {
+      // Quando chega perto do final, desacelera
+      if (contadorGiros >= totalGiros - 10) {
+        // Aumenta o intervalo gradualmente para dar efeito de freio
         clearInterval(intervaloRodando);
-
+        
         let frameFinal = 0;
-        const intervaloFreio = setInterval(() => {
+        const totalFramesFreio = 8;
+        
+        function giroFreio() {
           DOM.slots.forEach((slot) => {
             const aleatorio = Math.floor(Math.random() * IMAGENS.length);
             slot.src = IMAGENS[aleatorio];
           });
           frameFinal++;
+          
+          if (frameFinal < totalFramesFreio) {
+            // Aumenta o delay progressivamente: 100ms, 120ms, 150ms, 200ms...
+            const delay = 100 + (frameFinal * 25);
+            setTimeout(giroFreio, delay);
+          } else {
+            // ====================================
+            // FINALIZA O GIRO
+            // ====================================
+            DOM.slots.forEach(slot => {
+              slot.classList.remove('rodando-suave');
+            });
 
-          if (frameFinal >= 6) {
-            clearInterval(intervaloFreio);
-            finalizarGiro();
+            definirResultadosComChanceDeGanho(CONFIG.CHANCE_VITORIA);
+
+            setTimeout(() => {
+              verifiqueSeGanhou();
+              Estado.rodando = false;
+              DOM.playButton.disabled = false;
+              DOM.playButton.textContent = '🎰 Girar';
+              
+              // ====================================
+              // SÓ LIMPA O GIF AGORA - NO FINAL DA JOGADA
+              // ====================================
+              limparGif();
+            }, 400);
           }
-        }, 150);
+        }
+        
+        giroFreio();
       }
     }, CONFIG.INTERVALO_GIRO);
-
-    function finalizarGiro() {
-      DOM.slots.forEach(slot => {
-        slot.classList.remove('rodando-suave');
-      });
-
-      definirResultadosComChanceDeGanho(CONFIG.CHANCE_VITORIA);
-
-      setTimeout(() => {
-        verifiqueSeGanhou();
-        Estado.rodando = false;
-        DOM.playButton.disabled = false;
-        DOM.playButton.textContent = '🎰 Girar';
-      }, 300);
-    }
   };
 
   // ========================================
@@ -349,8 +371,6 @@
       }
     }
 
-    // NÃO LIMPA O GIF AQUI - DEIXA ELE EXIBIDO
-
     if (ganhou) {
       Estado.creditosValor += ganhoTotal;
       DOM.creditos.value = Estado.creditosValor;
@@ -367,7 +387,7 @@
         }
       });
 
-      // MOSTRA O GIF - ELE FICA ATÉ A PRÓXIMA JOGADA
+      // MOSTRA O GIF DE VITÓRIA - FICA ATÉ O FINAL DA PRÓXIMA JOGADA
       if (multiplicadorUsado >= 10) {
         mostrarGif(GIFS_FEEDBACK.VITORIA_PREMIUM);
       } else if (multiplicadorUsado >= 5) {
@@ -383,7 +403,7 @@
       DOM.divResultado.className = 'lost';
       Estado.derrotasConsecutivas++;
 
-      // MOSTRA O GIF - ELE FICA ATÉ A PRÓXIMA JOGADA
+      // MOSTRA O GIF DE DERROTA - FICA ATÉ O FINAL DA PRÓXIMA JOGADA
       if (Estado.derrotasConsecutivas >= 10) {
         mostrarGif(GIFS_FEEDBACK.DERROTA_FRUSTRANTE);
         Estado.derrotasConsecutivas = 0;
@@ -398,7 +418,7 @@
   }
 
   // ========================================
-  // MOSTRA GIF - FICA ATÉ A PRÓXIMA JOGADA
+  // MOSTRA GIF - FICA ATÉ O FINAL DA PRÓXIMA JOGADA
   // ========================================
   function mostrarGif(caminho) {
     if (!DOM.gifContainer) {
@@ -406,6 +426,7 @@
       return;
     }
 
+    // Se já tem um GIF, substitui
     fetch(caminho)
       .then(response => {
         if (!response.ok) {
@@ -430,12 +451,11 @@
 
         DOM.gifContainer.innerHTML = '';
         DOM.gifContainer.appendChild(img);
+        Estado.gifAtual = imagemFinal;
 
         // ====================================
-        // REMOVE O TIMEOUT - O GIF FICA ATÉ A PRÓXIMA JOGADA
+        // SEM TIMEOUT - SÓ SERÁ REMOVIDO NO FINAL DA PRÓXIMA JOGADA
         // ====================================
-        // O GIF será removido quando o usuário clicar em "Girar" novamente
-        // (função limparGif() é chamada no início de multiplicador())
       })
       .catch(() => {
         console.warn('⚠️ Erro ao carregar GIF, usando fallback');
@@ -449,7 +469,7 @@
           font-size: 14px;
           text-align: center;
         ">🎰 Resultado</div>`;
-        // Também fica até a próxima jogada
+        Estado.gifAtual = 'fallback';
       });
   }
 
@@ -489,7 +509,7 @@
     }
 
     console.log('🎰 Slot Anime - DANDADAN');
-    console.log('📊 Versão 3.2 - GIFs FICAM ATÉ PRÓXIMA JOGADA');
+    console.log('📊 Versão 3.3 - SLOTS RODAM DE VERDADE!');
     console.log('🎯 Chance de vitória: 51%');
     console.log('⭐ a003.gif e a007.gif pagam x10!');
     console.log('🚀 Jogo carregado!');
