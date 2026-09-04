@@ -7,12 +7,11 @@ function multiplicador() {
     "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
   ];
 
-  // Pesos ajustados para slot real
-  // Imagens que pagam mais (a003 e a007) são MUITO raras
-  const pesos = [0.35, 0.35, 0.02, 0.4, 0.4, 0.4, 0.02, 0.5, 0.5, 0.56];
+  // Pesos: imagens boas são EXTREMAMENTE raras
+  const pesos = [0.4, 0.4, 0.01, 0.45, 0.45, 0.45, 0.01, 0.5, 0.5, 0.6];
   
-  // Multiplicadores: prêmios maiores quando saem
-  const multiplicadores = [0.5, 0.75, 15, 2, 2.5, 3, 15, 4, 5, 1];
+  // Multiplicadores: quando paga, paga bem
+  const multiplicadores = [0.5, 0.75, 20, 2, 2.5, 3, 20, 4, 5, 1];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
@@ -55,7 +54,6 @@ function multiplicador() {
     clearInterval(intervaloRodando);
     slots.forEach(slot => slot.classList.remove("rodando-suave"));
 
-    // EFEITO DE PARADA - TREMOR
     slots.forEach(slot => {
       slot.classList.add("parando");
       setTimeout(() => {
@@ -63,8 +61,8 @@ function multiplicador() {
       }, 300);
     });
 
-    // CHANCE REAL: 35% (mais próximo de um slot real)
-    definirResultadosComChance(0.35);
+    // CHANCE BAIXA: 25%
+    definirResultadosComChance(0.25);
     verifiqueSeGanhou();
   }, 2500);
 
@@ -113,10 +111,9 @@ function multiplicador() {
   function forcarVitoria(linhasVencedoras) {
     const linhaEscolhida = linhasVencedoras[Math.floor(Math.random() * linhasVencedoras.length)];
     
-    // 70% das vitórias forçadas são com imagens que pagam bem (não as premium)
-    // 30% são com as premium (a003 e a007)
+    // 20% de chance de ser premium (a003/a007)
     let idxImagem;
-    if (Math.random() < 0.3) {
+    if (Math.random() < 0.2) {
       const indicesPremium = [2, 6];
       idxImagem = indicesPremium[Math.floor(Math.random() * indicesPremium.length)];
     } else {
@@ -190,7 +187,7 @@ function multiplicador() {
       const nomeArquivo = imagemVencedora.split('/').pop();
       const mult = multiplicadores[imagens.indexOf(imagemVencedora)];
       
-      if (mult >= 10) {
+      if (mult >= 15) {
         divResultado.textContent = `🔥 JACKPOT! ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
       } else {
         divResultado.textContent = `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
@@ -198,8 +195,7 @@ function multiplicador() {
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
       
-      // GIFs de vitória
-      if (mult >= 10) {
+      if (mult >= 15) {
         mostrarGif("./images/a010.gif");
       } else if (mult >= 5) {
         mostrarGif("./images/a011.gif");
