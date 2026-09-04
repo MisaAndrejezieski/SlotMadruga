@@ -3,45 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎰 Slot Anime 🎰</title>
+  <title>🎰 Slot Anime - DANDADAN 🎰</title>
+  
+  <meta name="description" content="Jogo de slots com tema anime DANDADAN! Gire e multiplique seus créditos.">
+  <meta name="theme-color" content="#ffcc00">
+  
   <link rel="stylesheet" href="index.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <div class="container">
     <div class="containerContents">
+
       <div class="title">
         <h2>🎰 Slot Anime 🎰</h2>
+        <p>⚡ Gire e multiplique seus créditos! ⚡</p>
       </div>
 
-      <div id="results">Boa sorte!</div>
+      <div id="results">✨ Boa sorte! ✨</div>
 
       <div class="images">
-        <img class="slots slot-1" src="./images/a001.gif" alt="Slot 1" title="Slot 1">
-        <img class="slots slot-2" src="./images/a002.gif" alt="Slot 2" title="Slot 2">
-        <img class="slots slot-3" src="./images/a003.gif" alt="Slot 3" title="Slot 3">
-        <img class="slots slot-4" src="./images/a004.gif" alt="Slot 4" title="Slot 4">
-        <img class="slots slot-5" src="./images/a005.gif" alt="Slot 5" title="Slot 5">
-        <img class="slots slot-6" src="./images/a006.gif" alt="Slot 6" title="Slot 6">
-        <img class="slots slot-7" src="./images/a007.gif" alt="Slot 7" title="Slot 7">
-        <img class="slots slot-8" src="./images/a008.gif" alt="Slot 8" title="Slot 8">
-        <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9" title="Slot 9">
+        <img class="slots slot-1" src="./images/a001.gif" alt="Slot 1" title="Slot 1" loading="lazy" draggable="false">
+        <img class="slots slot-2" src="./images/a002.gif" alt="Slot 2" title="Slot 2" loading="lazy" draggable="false">
+        <img class="slots slot-3" src="./images/a003.gif" alt="Slot 3" title="Slot 3" loading="lazy" draggable="false">
+        <img class="slots slot-4" src="./images/a004.gif" alt="Slot 4" title="Slot 4" loading="lazy" draggable="false">
+        <img class="slots slot-5" src="./images/a005.gif" alt="Slot 5" title="Slot 5" loading="lazy" draggable="false">
+        <img class="slots slot-6" src="./images/a006.gif" alt="Slot 6" title="Slot 6" loading="lazy" draggable="false">
+        <img class="slots slot-7" src="./images/a007.gif" alt="Slot 7" title="Slot 7" loading="lazy" draggable="false">
+        <img class="slots slot-8" src="./images/a008.gif" alt="Slot 8" title="Slot 8" loading="lazy" draggable="false">
+        <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9" title="Slot 9" loading="lazy" draggable="false">
       </div>
 
       <div class="credits">
-        <label>Créditos:</label>
-        <input type="number" id="creditos" value="100" readonly>
+        <label for="creditos">💰 Créditos:</label>
+        <input type="text" id="creditos" value="100" readonly aria-label="Créditos disponíveis">
       </div>
 
       <div class="buttons">
-        <button id="playButton" onclick="multiplicador()">🎲 Jogar</button>
-        <button id="buyButton" onclick="comprarCreditos()">💳 Comprar Créditos</button>
+        <button id="playButton" onclick="multiplicador()" aria-label="Girar slots">
+          🎰 Girar
+        </button>
+        <button class="btn-comprar" onclick="comprarCreditos()" aria-label="Comprar créditos">
+          💳 Comprar
+        </button>
       </div>
+
+      <div class="legenda-multiplicadores">
+        <span>⭐ a003 = x10</span>
+        <span>⭐ a007 = x10</span>
+        <span>🔹 a009 = x5</span>
+        <span>🔹 a008 = x4</span>
+        <span>🔹 a006 = x3</span>
+      </div>
+
     </div>
   </div>
 
-  <!-- GIFs de feedback -->
-  <div class="gif-container" id="gifContainer"></div>
+  <div class="gif-container" id="gifContainer" aria-live="polite"></div>
 
   <script src="index.js"></script>
+
 </body>
 </html>
