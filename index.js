@@ -1,6 +1,5 @@
 function multiplicador() {
   const quantidadeDeSlot = 9;
-  const apostaFixa = 10;
 
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
@@ -9,18 +8,18 @@ function multiplicador() {
   ];
 
   const pesos = [0.3, 0.3, 0.05, 0.4, 0.4, 0.4, 0.05, 0.5, 0.5, 0.6];
-  
-  // MULTIPLICADORES AJUSTADOS - a003 e a007 pagam x10
   const multiplicadores = [0.5, 0.75, 10, 2, 2.5, 3, 10, 4, 5, 1];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
   const creditos = document.getElementById("creditos");
   const gifContainer = document.getElementById("gifContainer");
+  const apostaInput = document.getElementById("aposta");
 
   let creditosValor = parseInt(creditos.value);
   let resultados = [];
   let derrotasConsecutivas = parseInt(localStorage.getItem("derrotas") || "0");
+  let apostaFixa = parseInt(apostaInput.value) || 10;
 
   if (apostaFixa > creditosValor) {
     divResultado.textContent = "Créditos insuficientes!";
@@ -51,8 +50,15 @@ function multiplicador() {
   setTimeout(() => {
     clearInterval(intervaloRodando);
     slots.forEach(slot => slot.classList.remove("rodando-suave"));
-    
-    // 51% DE CHANCE DE VITÓRIA
+
+    // EFEITO DE PARADA - TREMOR
+    slots.forEach(slot => {
+      slot.classList.add("parando");
+      setTimeout(() => {
+        slot.classList.remove("parando");
+      }, 300);
+    });
+
     definirResultadosComChance(0.51);
     verifiqueSeGanhou();
   }, 2500);
@@ -69,7 +75,6 @@ function multiplicador() {
   }
 
   function definirResultadosComChance(chance) {
-    // Gera resultados aleatórios
     for (let i = 0; i < quantidadeDeSlot; i++) {
       const aleatorio = selecionarImagemComPeso();
       const slotAtual = divImagens.querySelector(`.slot-${i + 1}`);
@@ -168,7 +173,6 @@ function multiplicador() {
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
       
-      // GIFs de vitória
       const mult = multiplicadores[imagens.indexOf(resultados[0])];
       if (mult >= 10) {
         mostrarGif("./images/a010.gif");
