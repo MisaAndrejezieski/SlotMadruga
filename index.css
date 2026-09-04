@@ -1,708 +1,174 @@
-/* ========================================
-   VARIÁVEIS GLOBAIS
-   ======================================== */
 :root {
-  --cor-fundo: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-  --cor-texto: #ffffff;
+  --cor-fundo: linear-gradient(135deg, #413e3e, #838181);
+  --cor-texto: #fff;
   --cor-destaque: #ffcc00;
-  --cor-destaque-secundario: #ff6b6b;
-  --cor-vitoria: #00d2ff;
-  --cor-derrota: #ff4757;
-  --cor-fundo-transparente: rgba(8, 8, 8, 0.85);
+  --cor-vitoria: #27ae60;
+  --cor-derrota: #c0392b;
+  --cor-fundo-transparente: rgb(8, 8, 8);
   --tamanho-slot: 90px;
-  --sombra-padrao: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --border-radius-padrao: 16px;
-  --transicao-padrao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ========================================
-   RESET E BASE
-   ======================================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 html, body {
+  margin: 0;
+  padding: 0;
   height: 100%;
-  font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+  font-family: 'Roboto', sans-serif;
   background: var(--cor-fundo);
   color: var(--cor-texto);
-  overflow-x: hidden;
-  scroll-behavior: smooth;
 }
 
-/* ========================================
-   CONTAINER PRINCIPAL
-   ======================================== */
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  background: none;
   position: relative;
 }
 
 .container::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   background-image: url('./images/alice-hana.gif');
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  filter: brightness(0.3) blur(4px);
+  filter: brightness(0.5);
   z-index: 0;
-  animation: fundoAnimado 20s ease-in-out infinite alternate;
 }
 
-@keyframes fundoAnimado {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.05); }
-}
-
-/* ========================================
-   CONTEÚDO PRINCIPAL
-   ======================================== */
 .containerContents {
   position: relative;
   z-index: 1;
-  background: var(--cor-fundo-transparente);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  width: 100%;
-  max-width: 420px;
-  padding: 28px 24px;
-  border-radius: var(--border-radius-padrao);
+  background: rgba(8, 8, 8, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  width: 90%;
+  max-width: 380px;
+  padding: 20px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: var(--sombra-padrao), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  animation: surgir 0.6s ease-out;
-}
-
-@keyframes surgir {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* ========================================
-   TÍTULO
-   ======================================== */
-.title {
-  margin-bottom: 16px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
 }
 
 .title h2 {
+  margin: 0;
   font-size: 2rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--cor-destaque), #ff6b6b, var(--cor-destaque));
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradienteAnimado 3s ease-in-out infinite;
-  letter-spacing: 1px;
-  text-shadow: none;
+  color: var(--cor-destaque);
+  text-align: center;
 }
 
-@keyframes gradienteAnimado {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.title p {
-  font-size: 0.85rem;
-  opacity: 0.7;
-  margin-top: 4px;
-  color: var(--cor-texto);
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.7);
-}
-
-/* ========================================
-   RESULTADOS
-   ======================================== */
 #results {
-  margin: 12px 0 16px 0;
-  padding: 14px 12px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
   font-size: 1rem;
-  font-weight: 700;
-  min-height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transicao-padrao);
-  border: 2px solid rgba(255, 255, 255, 0.06);
-  letter-spacing: 0.3px;
-  line-height: 1.4;
 }
 
-#results.won {
-  background: linear-gradient(135deg, rgba(0, 210, 255, 0.25), rgba(0, 210, 255, 0.05));
-  border-color: var(--cor-vitoria);
-  color: var(--cor-vitoria);
-  box-shadow: 0 0 40px rgba(0, 210, 255, 0.15), inset 0 0 30px rgba(0, 210, 255, 0.05);
-  animation: pulsarVitoria 1.5s ease-in-out infinite;
-}
+#results.won { background: var(--cor-vitoria); }
+#results.lost { background: var(--cor-derrota); }
 
-#results.lost {
-  background: linear-gradient(135deg, rgba(255, 71, 87, 0.25), rgba(255, 71, 87, 0.05));
-  border-color: var(--cor-derrota);
-  color: var(--cor-derrota);
-  box-shadow: 0 0 40px rgba(255, 71, 87, 0.15), inset 0 0 30px rgba(255, 71, 87, 0.05);
-}
-
-@keyframes pulsarVitoria {
-  0%, 100% {
-    box-shadow: 0 0 40px rgba(0, 210, 255, 0.15);
-  }
-  50% {
-    box-shadow: 0 0 60px rgba(0, 210, 255, 0.3);
-  }
-}
-
-/* ========================================
-   SLOTS (GRADE DE IMAGENS)
-   ======================================== */
 .images {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  margin: 12px 0 16px 0;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 14px;
-  border: 3px solid rgba(255, 204, 0, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.images::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, 
-    rgba(255, 204, 0, 0.03) 0%, 
-    transparent 30%, 
-    transparent 70%, 
-    rgba(255, 204, 0, 0.03) 100%
-  );
-  pointer-events: none;
-  z-index: 3;
-}
-
-.images::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 17px;
-  background: linear-gradient(135deg, 
-    rgba(255, 204, 0, 0.15), 
-    transparent 40%, 
-    transparent 60%, 
-    rgba(255, 204, 0, 0.15)
-  );
-  z-index: -1;
-  filter: blur(10px);
+  margin: 10px 0;
 }
 
 .slots {
-  width: 100%;
-  aspect-ratio: 1/1;
+  width: var(--tamanho-slot);
+  height: var(--tamanho-slot);
   border-radius: 10px;
-  border: 2px solid rgba(255, 204, 0, 0.15);
-  background: rgba(0, 0, 0, 0.5);
-  object-fit: cover;
-  transition: var(--transicao-padrao);
-  image-rendering: auto;
-  position: relative;
-  overflow: hidden;
+  border: 2px solid var(--cor-destaque);
+  background: rgba(255,255,255,0.1);
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-.slots:hover {
-  border-color: rgba(255, 204, 0, 0.4);
-  transform: scale(1.02);
+.rodando-suave {
+  animation: giroSuave 0.5s linear infinite;
 }
 
-/* ========================================
-   ANIMAÇÃO DE ROLAGEM VERTICAL - LAS VEGAS
-   ======================================== */
-.rodando-vegas {
-  animation: rolagemVertical 0.3s ease-in-out infinite;
-  transform-origin: center center;
-  border-color: rgba(255, 204, 0, 0.4);
+@keyframes giroSuave {
+  0% { transform: scale(1) rotateX(0deg); }
+  50% { transform: scale(1.05) rotateX(180deg); }
+  100% { transform: scale(1) rotateX(360deg); }
 }
 
-@keyframes rolagemVertical {
-  0% {
-    transform: translateY(0px) scale(1);
-    filter: brightness(1) blur(2px);
-  }
-  25% {
-    transform: translateY(-8px) scale(0.92);
-    filter: brightness(0.6) blur(3px);
-  }
-  50% {
-    transform: translateY(0px) scale(1.06);
-    filter: brightness(1.3) blur(1px);
-  }
-  75% {
-    transform: translateY(8px) scale(0.92);
-    filter: brightness(0.6) blur(3px);
-  }
-  100% {
-    transform: translateY(0px) scale(1);
-    filter: brightness(1) blur(2px);
-  }
-}
-
-.slots.rodando-vegas {
-  filter: blur(2px);
-}
-
-/* ========================================
-   SLOTS VENCEDORES
-   ======================================== */
 .slots.ganhou {
-  border: 3px solid #00d2ff;
-  box-shadow: 
-    0 0 30px rgba(0, 210, 255, 0.6),
-    inset 0 0 30px rgba(0, 210, 255, 0.2),
-    0 0 60px rgba(0, 210, 255, 0.2);
-  animation: brilhoVitoria 0.8s ease-in-out infinite;
-  z-index: 2;
-  filter: blur(0px) !important;
+  border: 3px solid var(--cor-vitoria);
+  box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
-@keyframes brilhoVitoria {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 50px rgba(0, 210, 255, 0.8), 0 0 100px rgba(0, 210, 255, 0.2);
-    transform: scale(1.08);
-  }
+button {
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: var(--cor-destaque);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.5s;
 }
 
-/* ========================================
-   CRÉDITOS
-   ======================================== */
+button:hover {
+  background: #ffdd33;
+  transform: translateY(-4px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 .credits {
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  margin: 12px 0;
-  transition: var(--transicao-padrao);
-}
-
-.credits:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .credits label {
   color: var(--cor-destaque);
-  font-weight: 700;
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-weight: bold;
 }
 
 .credits input {
-  width: 90px;
+  width: 80px;
   background: transparent;
   border: none;
   color: var(--cor-texto);
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-align: right;
-  outline: none;
-  transition: var(--transicao-padrao);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.credits input:focus {
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom: 2px solid var(--cor-destaque);
-}
-
-/* ========================================
-   BOTÕES
-   ======================================== */
-.buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
-}
-
-.buttons button {
-  flex: 1;
-  padding: 14px 20px;
   font-size: 1rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: var(--transicao-padrao);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  text-align: right;
 }
 
-#playButton {
-  background: linear-gradient(135deg, #ffcc00, #f7b731);
-  color: #1a1a2e;
-  box-shadow: 0 4px 20px rgba(255, 204, 0, 0.25);
-}
-
-#playButton:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(255, 204, 0, 0.4);
-}
-
-#playButton:active:not(:disabled) {
-  transform: translateY(0px);
-}
-
-#playButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-#playButton::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
-  transform: translateX(-100%);
-  transition: transform 0.6s;
-}
-
-#playButton:hover:not(:disabled)::after {
-  transform: translateX(100%);
-}
-
-.btn-comprar {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(46, 204, 113, 0.25);
-}
-
-.btn-comprar:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(46, 204, 113, 0.4);
-}
-
-.btn-comprar:active {
-  transform: translateY(0px);
-}
-
-/* ========================================
-   GIF CONTAINER (FEEDBACK)
-   ======================================== */
 .gif-container {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 9999;
-  pointer-events: none;
+  bottom: 15px;
+  right: 15px;
+  z-index: 999;
 }
 
 .gif-feedback {
-  width: 130px;
+  width: 120px;
   height: auto;
-  border-radius: 16px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 0 0 2px rgba(255, 255, 255, 0.05);
-  animation: aparecer 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  border-radius: 10px;
+  opacity: 0;
+  animation: aparecerDesaparecer 4s forwards;
 }
 
-@keyframes aparecer {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.7) rotate(-5deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotate(0deg);
-  }
-}
-
-/* ========================================
-   LEGENDA DOS MULTIPLICADORES
-   ======================================== */
-.legenda-multiplicadores {
-  margin-top: 12px;
-  font-size: 0.7rem;
-  opacity: 0.5;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 10px;
-}
-
-.legenda-multiplicadores span {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* ========================================
-   SCROLLBAR PERSONALIZADA
-   ======================================== */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--cor-destaque);
-  border-radius: 4px;
-  transition: var(--transicao-padrao);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #ffdd33;
-}
-
-/* ========================================
-   RESPONSIVIDADE
-   ======================================== */
-
-@media (max-width: 768px) {
-  .containerContents {
-    max-width: 380px;
-    padding: 20px 16px;
-  }
-
-  .title h2 {
-    font-size: 1.6rem;
-  }
-
-  .slots {
-    border-width: 1.5px;
-  }
-
-  .gif-feedback {
-    width: 100px;
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --tamanho-slot: 75px;
-  }
-
-  .containerContents {
-    max-width: 340px;
-    padding: 16px 12px;
-    border-radius: 14px;
-  }
-
-  .title h2 {
-    font-size: 1.4rem;
-  }
-
-  .title p {
-    font-size: 0.75rem;
-  }
-
-  .images {
-    gap: 6px;
-    padding: 8px;
-  }
-
-  #results {
-    font-size: 0.85rem;
-    padding: 10px 8px;
-    min-height: 44px;
-  }
-
-  .buttons button {
-    padding: 10px 14px;
-    font-size: 0.85rem;
-  }
-
-  .credits {
-    padding: 8px 12px;
-  }
-
-  .credits input {
-    width: 70px;
-    font-size: 0.95rem;
-  }
-
-  .gif-feedback {
-    width: 80px;
-  }
-
-  .gif-container {
-    bottom: 16px;
-    right: 16px;
-  }
-
-  .legenda-multiplicadores {
-    font-size: 0.6rem;
-    gap: 8px;
-  }
-}
-
-@media (max-width: 380px) {
-  :root {
-    --tamanho-slot: 60px;
-  }
-
-  .containerContents {
-    max-width: 290px;
-    padding: 12px 10px;
-    border-radius: 12px;
-  }
-
-  .title h2 {
-    font-size: 1.1rem;
-  }
-
-  .images {
-    gap: 4px;
-    padding: 6px;
-  }
-
-  .slots {
-    border-radius: 6px;
-  }
-
-  #results {
-    font-size: 0.75rem;
-    padding: 8px 6px;
-    min-height: 36px;
-  }
-
-  .buttons {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .buttons button {
-    padding: 10px;
-    font-size: 0.8rem;
-  }
-
-  .credits {
-    flex-direction: row;
-    padding: 6px 10px;
-  }
-
-  .credits label {
-    font-size: 0.8rem;
-  }
-
-  .credits input {
-    width: 60px;
-    font-size: 0.85rem;
-  }
-
-  .gif-feedback {
-    width: 65px;
-    border-radius: 10px;
-  }
-
-  .gif-container {
-    bottom: 12px;
-    right: 12px;
-  }
-
-  .legenda-multiplicadores {
-    font-size: 0.55rem;
-    gap: 6px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .containerContents {
-    max-width: 480px;
-    padding: 32px 28px;
-  }
-
-  .title h2 {
-    font-size: 2.4rem;
-  }
-
-  .slots {
-    border-width: 2.5px;
-  }
-
-  .gif-feedback {
-    width: 150px;
-  }
-}
-
-@media (prefers-contrast: high) {
-  :root {
-    --cor-destaque: #ffdd00;
-    --cor-vitoria: #00e5ff;
-    --cor-derrota: #ff1744;
-  }
-
-  .containerContents {
-    border: 2px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .slots {
-    border-width: 2.5px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  .container::before {
-    animation: none;
-  }
-
-  .rodando-vegas {
-    animation: none !important;
-  }
-
-  .slots.ganhou {
-    animation: none !important;
-  }
-
-  #results.won {
-    animation: none !important;
-  }
-
-  .gif-feedback {
-    animation: none !important;
-    opacity: 1;
-  }
+@keyframes aparecerDesaparecer {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(20px); }
 }
