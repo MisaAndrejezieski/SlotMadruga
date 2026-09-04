@@ -2,7 +2,7 @@
  * ========================================
  * JOGO DE SLOTS - DANDADAN
  * ========================================
- * Versão: 4.0 - ESTILO LAS VEGAS (ROTATIVO)
+ * Versão: 4.1 - VELOCIDADE REDUZIDA + PARADA EM CASCATA
  * ========================================
  */
 
@@ -16,8 +16,8 @@
     QUANTIDADE_SLOT: 9,
     APOSTA_FIXA: 10,
     CHANCE_VITORIA: 0.51,
-    TEMPO_GIRO: 3000,
-    VELOCIDADE_GIRO: 50,
+    TEMPO_GIRO: 4000,           // 4 segundos de giro
+    VELOCIDADE_GIRO: 120,       // MAIS LENTO: 120ms entre trocas
     CREDITOS_INICIAIS: 100,
     COMPRA_CREDITOS: 100
   };
@@ -113,7 +113,7 @@
   }
 
   // ========================================
-  // FUNÇÃO PRINCIPAL - ESTILO LAS VEGAS
+  // FUNÇÃO PRINCIPAL - PARADA EM CASCATA
   // ========================================
   window.multiplicador = function() {
     'use strict';
@@ -138,90 +138,130 @@
     DOM.divResultado.className = '';
 
     // ========================================
-    // INICIA GIRO ESTILO LAS VEGAS
+    // PREPARA OS SLOTS PARA O GIRO
     // ========================================
-    
-    // Array para controlar a posição atual de cada slot
-    const posicoesAtuais = [];
-    const imagensPorSlot = [];
-    
-    // Prepara cada slot com uma sequência de imagens para rolagem
-    DOM.slots.forEach((slot, index) => {
+    DOM.slots.forEach((slot) => {
       slot.classList.remove('ganhou');
       slot.classList.remove('rodando-vegas');
-      
-      // Cria uma sequência aleatória de imagens para este slot
-      const sequencia = [];
-      const totalImagens = 30 + Math.floor(Math.random() * 20); // 30-50 imagens por slot
-      for (let i = 0; i < totalImagens; i++) {
-        const idx = Math.floor(Math.random() * IMAGENS.length);
-        sequencia.push(IMAGENS[idx]);
-      }
-      imagensPorSlot[index] = sequencia;
-      posicoesAtuais[index] = 0;
-      
-      // Aplica a primeira imagem
-      slot.src = sequencia[0];
-      
-      // Aplica animação de rolagem vertical
       slot.classList.add('rodando-vegas');
+      // Aplica blur durante o giro
+      slot.style.filter = 'blur(2px)';
     });
 
     // ========================================
-    // ANIMAÇÃO DE ROLAGEM VERTICAL
+    // GIRO COM TROCA DE IMAGENS (MAIS LENTO)
     // ========================================
-    let quadro = 0;
-    const totalQuadros = 30; // Número de atualizações
-    const delayBase = 40; // ms entre cada quadro (começa rápido)
+    let contadorGiros = 0;
+    const totalGiros = Math.floor(CONFIG.TEMPO_GIRO / CONFIG.VELOCIDADE_GIRO);
     
-    function atualizarSlots() {
-      let todosPararam = true;
-      
+    // Cada slot tem seu próprio contador de parada
+    const slotsParados = new Array(DOM.slots.length).fill(false);
+    const imagensFinais = new Array(DOM.slots.length).fill('');
+
+    const intervaloRodando = setInterval(() => {
       DOM.slots.forEach((slot, index) => {
-        // Cada slot tem sua própria velocidade de parada
-        // Os primeiros slots param mais cedo, os últimos mais tarde (efeito cascata)
-        const fatorParada = index / DOM.slots.length; // 0 a 1
-        const quadroParada = 15 + (fatorParada * 15); // 15 a 30
-        const deveParar = quadro > quadroParada;
+        // Se o slot já parou, não troca mais
+        if (slotsParados[index]) return;
         
-        if (!deveParar && posicoesAtuais[index] < imagensPorSlot[index].length - 1) {
-          posicoesAtuais[index]++;
-          slot.src = imagensPorSlot[index][posicoesAtuais[index]];
-          todosPararam = false;
-        }
+        const aleatorio = Math.floor(Math.random() * IMAGENS.length);
+        slot.src = IMAGENS[aleatorio];
+        imagensFinais[index] = IMAGENS[aleatorio];
       });
       
-      quadro++;
+      contadorGiros++;
+
+      // ========================================
+      // PARADA EM CASCATA (CADA SLOT PARA EM UM MOMENTO)
+      // ========================================
+      // Os slots param em ordem: primeiro o 1º, depois o 2º, etc.
+      // Mas com um atraso entre cada um
+      const slotsPorParar = DOM.slots.length;
       
-      // Efeito de desaceleração progressiva
-      const progresso = quadro / totalQuadros;
-      const delay = delayBase + (progresso * progresso * 150);
+      for (let i = 0; i < slotsPorParar; i++) {
+        // Cada slot para em um momento específico
+        const momentoParada = Math.floor((i + 1) * (totalGiros / (slotsPorParar + 1)));
+        
+        if (contadorGiros >= momentoParada && !slotsParados[i]) {
+          slotsParados[i] = true;
+          const slot = DOM.slots[i];
+          // Remove a animação e o blur
+          slot.classList.remove('rodando-vegas');
+          slot.style.filter = 'blur(0px)';
+          
+          // Efeito de "travamento" - pequena vibração
+          slot.style.transition = 'transform 0.1s ease';
+          slot.style.transform = 'scale(1.05)';
+          setTimeout(() => {
+            slot.style.transform = 'scale(1)';
+          }, 150);
+          
+          console.log(`🎰 Slot ${i+1} parou!`);
+        }
+      }
+
+      // ========================================
+      // VERIFICA SE TODOS OS SLOTS PARARAM
+      // ========================================
+      const todosPararam = slotsParados.every(parado => parado === true);
       
-      if (quadro < totalQuadros && !todosPararam) {
-        setTimeout(atualizarSlots, delay);
-      } else {
+      if (todosPararam || contadorGiros >= totalGiros + 10) {
+        clearInterval(intervaloRodando);
+        
+        // Garante que todos os slots pararam
+        DOM.slots.forEach((slot, index) => {
+          if (!slotsParados[index]) {
+            slot.classList.remove('rodando-vegas');
+            slot.style.filter = 'blur(0px)';
+            slotsParados[index] = true;
+          }
+        });
+        
         // ========================================
         // FINALIZA O GIRO
         // ========================================
-        DOM.slots.forEach(slot => {
-          slot.classList.remove('rodando-vegas');
-        });
-        
-        definirResultadosComChanceDeGanho(CONFIG.CHANCE_VITORIA);
-        
         setTimeout(() => {
+          // Pega os resultados finais de cada slot
+          DOM.slots.forEach((slot, index) => {
+            Estado.resultados[index] = slot.src;
+          });
+          
+          // Verifica se precisa forçar vitória/derrota
+          verificarEForcarResultado();
+          
+          // Mostra o resultado
           verifiqueSeGanhou();
+          
           Estado.rodando = false;
           DOM.playButton.disabled = false;
           DOM.playButton.textContent = '🎰 Girar';
           limparGif();
-        }, 400);
+        }, 500);
+      }
+    }, CONFIG.VELOCIDADE_GIRO);
+  };
+
+  // ========================================
+  // FUNÇÃO PARA VERIFICAR E FORCAR RESULTADO
+  // ========================================
+  function verificarEForcarResultado() {
+    let temVitoria = false;
+    for (const linha of LINHAS_VENCEDORAS) {
+      const [a, b, c] = linha;
+      if (Estado.resultados[a] === Estado.resultados[b] &&
+          Estado.resultados[a] === Estado.resultados[c]) {
+        temVitoria = true;
+        break;
       }
     }
-    
-    // Inicia a animação
-    setTimeout(atualizarSlots, 100);
-  };
+
+    const deveGanhar = Math.random() < CONFIG.CHANCE_VITORIA;
+
+    if (deveGanhar && !temVitoria) {
+      forcarVitoria();
+    } else if (!deveGanhar && temVitoria) {
+      quebrarVitoria();
+    }
+  }
 
   // ========================================
   // FUNÇÕES AUXILIARES
@@ -237,35 +277,6 @@
       if (numeroAleatorio < somaPesos) return i;
     }
     return PESOS.length - 1;
-  }
-
-  function definirResultadosComChanceDeGanho(chanceDeGanhar) {
-    for (let i = 0; i < CONFIG.QUANTIDADE_SLOT; i++) {
-      const aleatorio = selecionarImagemComPeso();
-      const slotAtual = DOM.divImagens.querySelector(`.slot-${i + 1}`);
-      if (slotAtual) {
-        slotAtual.src = IMAGENS[aleatorio];
-        Estado.resultados[i] = IMAGENS[aleatorio];
-      }
-    }
-
-    let temVitoria = false;
-    for (const linha of LINHAS_VENCEDORAS) {
-      const [a, b, c] = linha;
-      if (Estado.resultados[a] === Estado.resultados[b] &&
-          Estado.resultados[a] === Estado.resultados[c]) {
-        temVitoria = true;
-        break;
-      }
-    }
-
-    const deveGanhar = Math.random() < chanceDeGanhar;
-
-    if (deveGanhar && !temVitoria) {
-      forcarVitoria();
-    } else if (!deveGanhar && temVitoria) {
-      quebrarVitoria();
-    }
   }
 
   function forcarVitoria() {
@@ -498,7 +509,7 @@
     }
 
     console.log('🎰 Slot Anime - DANDADAN');
-    console.log('📊 Versão 4.0 - ESTILO LAS VEGAS');
+    console.log('📊 Versão 4.1 - VELOCIDADE REDUZIDA + CASCATA');
     console.log('🎯 Chance de vitória: 51%');
     console.log('⭐ a003.gif e a007.gif pagam x10!');
     console.log('🚀 Jogo carregado!');
