@@ -215,7 +215,7 @@ function multiplicador() {
       } else if (derrotasConsecutivas >= 5) {
         mostrarGif("./images/rickdance.webp");
       } else {
-        mostrarGif("./images/rickdance.webp");
+        mostrarGif("./images/travolta.webp");
       }
     }
 
