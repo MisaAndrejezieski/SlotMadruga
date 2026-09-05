@@ -213,7 +213,7 @@ function multiplicador() {
         mostrarGif("./images/giphy004.gif");
         derrotasConsecutivas = 0;
       } else if (derrotasConsecutivas >= 5) {
-        mostrarGif("./images/giphy001.gif");
+        mostrarGif("./images/rickdance.webp");
       } else {
         mostrarGif("./images/rickdance.webp");
       }
