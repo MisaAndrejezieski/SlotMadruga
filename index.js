@@ -215,7 +215,7 @@ function multiplicador() {
       } else if (derrotasConsecutivas >= 5) {
         mostrarGif("./images/giphy001.gif");
       } else {
-        mostrarGif("./images/alice-hana.gif");
+        mostrarGif("./images/rickdance.webp");
       }
     }
 
