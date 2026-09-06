@@ -5,7 +5,7 @@
   --cor-vitoria: #27ae60;
   --cor-derrota: #c0392b;
   --cor-fundo-transparente: rgb(8, 8, 8);
-  --tamanho-slot: 90px;
+  --tamanho-slot: 100%;
 }
 
 html, body {
@@ -22,8 +22,8 @@ html, body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: none;
   position: relative;
+  overflow: hidden;
 }
 
 .container::before {
@@ -40,7 +40,7 @@ html, body {
 .containerContents {
   position: relative;
   z-index: 1;
-  background: rgba(8, 8, 8, 0.8);
+  background: rgba(8, 8, 8, 0.85);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   width: 90%;
@@ -49,6 +49,7 @@ html, body {
   border-radius: 20px;
   text-align: center;
   box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  box-sizing: border-box;
 }
 
 .title h2 {
@@ -64,6 +65,8 @@ html, body {
   border-radius: 10px;
   background: rgba(255,255,255,0.1);
   font-size: 1rem;
+  font-weight: bold;
+  transition: background 0.3s ease;
 }
 
 #results.won { background: var(--cor-vitoria); }
@@ -72,42 +75,43 @@ html, body {
 .images {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin: 10px 0;
+  gap: 10px;
+  margin: 15px 0;
 }
 
 .slots {
   width: var(--tamanho-slot);
-  height: var(--tamanho-slot);
+  aspect-ratio: 1 / 1;
   border-radius: 10px;
   border: 2px solid var(--cor-destaque);
   background: rgba(255,255,255,0.1);
-  object-fit: contain;
-  transition: transform 0.3s ease;
+  object-fit: cover;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, border-color 0.3s ease;
+  backface-visibility: hidden;
 }
 
 .rodando-suave {
-  animation: giroSuave 0.5s linear infinite;
+  animation: giroSuave 0.4s linear infinite;
 }
 
 @keyframes giroSuave {
-  0% { transform: scale(1) rotateX(0deg); }
-  50% { transform: scale(1.05) rotateX(180deg); }
-  100% { transform: scale(1) rotateX(360deg); }
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(0.95) translateY(-5px); }
+  100% { transform: scale(1) translateY(0); }
 }
 
-/* EFEITO DE PARADA - TREMOR */
 .parando {
   animation: tremor 0.3s ease-in-out;
 }
 
 @keyframes tremor {
-  0% { transform: translateX(0) rotate(0deg); }
+  0% { transform: translateX(0); }
   20% { transform: translateX(-4px) rotate(-2deg); }
   40% { transform: translateX(4px) rotate(2deg); }
   60% { transform: translateX(-2px) rotate(-1deg); }
   80% { transform: translateX(2px) rotate(1deg); }
-  100% { transform: translateX(0) rotate(0deg); }
+  100% { transform: translateX(0); }
 }
 
 .slots.ganhou {
@@ -120,26 +124,33 @@ button {
   font-size: 1.1rem;
   font-weight: bold;
   background: var(--cor-destaque);
+  color: #1a1a1a;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.5s;
+  transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background: #ffdd33;
-  transform: translateY(-4px);
+  transform: translateY(-2px);
 }
 
-button:active {
+button:active:not(:disabled) {
   transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .aposta-container {
@@ -147,7 +158,7 @@ button:active {
   justify-content: space-between;
   align-items: center;
   background: rgba(255,255,255,0.1);
-  padding: 10px;
+  padding: 10px 15px;
   border-radius: 10px;
   margin: 10px 0;
 }
@@ -178,8 +189,9 @@ button:active {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background: rgba(255,255,255,0.1);
-  padding: 10px;
+  padding: 10px 15px;
   border-radius: 10px;
 }
 
@@ -189,12 +201,15 @@ button:active {
 }
 
 .credits input {
-  width: 80px;
+  width: 100px;
   background: transparent;
   border: none;
   color: var(--cor-texto);
   font-size: 1rem;
+  font-weight: bold;
   text-align: right;
+  pointer-events: none;
+  outline: none;
 }
 
 .gif-container {
@@ -202,6 +217,7 @@ button:active {
   bottom: 15px;
   right: 15px;
   z-index: 999;
+  pointer-events: none;
 }
 
 .gif-feedback {
@@ -209,12 +225,12 @@ button:active {
   height: auto;
   border-radius: 10px;
   opacity: 0;
-  animation: aparecerDesaparecer 4s forwards;
+  animation: aparecerDesaparecer 4s ease-in-out forwards;
 }
 
 @keyframes aparecerDesaparecer {
   0% { opacity: 0; transform: translateY(20px); }
-  10% { opacity: 1; transform: translateY(0); }
-  90% { opacity: 1; }
+  15% { opacity: 1; transform: translateY(0); }
+  85% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(20px); }
 }
