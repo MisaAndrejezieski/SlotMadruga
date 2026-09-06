@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("playButton").addEventListener("click", multiplicador);
+  document.getElementById("buyButton").addEventListener("click", comprarCreditos);
+});
+
 function multiplicador() {
   const quantidadeDeSlot = 9;
 
@@ -7,10 +12,7 @@ function multiplicador() {
     "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
   ];
 
-  // Pesos: imagens boas são EXTREMAMENTE raras
   const pesos = [0.4, 0.4, 0.01, 0.45, 0.45, 0.45, 0.01, 0.5, 0.5, 0.6];
-  
-  // Multiplicadores: quando paga, paga bem
   const multiplicadores = [0.5, 0.75, 20, 2, 2.5, 3, 20, 4, 5, 1];
 
   const divImagens = document.querySelector(".images");
@@ -18,15 +20,20 @@ function multiplicador() {
   const creditos = document.getElementById("creditos");
   const gifContainer = document.getElementById("gifContainer");
   const apostaInput = document.getElementById("aposta");
+  const playBtn = document.getElementById("playButton");
 
-  let creditosValor = parseInt(creditos.value);
-  let resultados = [];
+  let creditosValor = parseInt(creditos.value) || 0;
   let derrotasConsecutivas = parseInt(localStorage.getItem("derrotas") || "0");
   let apostaFixa = parseInt(apostaInput.value) || 10;
+  let resultados = new Array(quantidadeDeSlot);
+
+  // Desabilita o botão para evitar múltiplos cliques na mesma rodada
+  playBtn.disabled = true;
 
   if (apostaFixa > creditosValor) {
     divResultado.textContent = "Créditos insuficientes!";
-    divResultado.classList = 'lost';
+    divResultado.className = 'lost';
+    playBtn.disabled = false;
     return;
   }
 
@@ -34,10 +41,9 @@ function multiplicador() {
   creditos.value = creditosValor;
 
   divResultado.textContent = "Rodando...";
-  divResultado.classList = "";
+  divResultado.className = "";
 
   const slots = document.querySelectorAll(".slots");
-
   slots.forEach(slot => {
     slot.classList.remove("ganhou");
     slot.classList.add("rodando-suave");
@@ -54,16 +60,17 @@ function multiplicador() {
     clearInterval(intervaloRodando);
     slots.forEach(slot => slot.classList.remove("rodando-suave"));
 
-    slots.forEach(slot => {
+    // Define os resultados e atualiza a interface
+    definirResultadosComChance(0.25);
+
+    slots.forEach((slot, index) => {
+      slot.src = resultados[index];
       slot.classList.add("parando");
-      setTimeout(() => {
-        slot.classList.remove("parando");
-      }, 300);
+      setTimeout(() => slot.classList.remove("parando"), 300);
     });
 
-    // CHANCE BAIXA: 25%
-    definirResultadosComChance(0.25);
     verifiqueSeGanhou();
+    playBtn.disabled = false; // Reabilita o botão ao final
   }, 2500);
 
   function selecionarImagemComPeso() {
@@ -77,12 +84,19 @@ function multiplicador() {
     return pesos.length - 1;
   }
 
+  function checarVitorias(arrResultados) {
+    const linhasVencedoras = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    return linhasVencedoras.some(([a, b, c]) => 
+      arrResultados[a] && arrResultados[a] === arrResultados[b] && arrResultados[a] === arrResultados[c]
+    );
+  }
+
   function definirResultadosComChance(chance) {
     for (let i = 0; i < quantidadeDeSlot; i++) {
-      const aleatorio = selecionarImagemComPeso();
-      const slotAtual = divImagens.querySelector(`.slot-${i + 1}`);
-      slotAtual.src = imagens[aleatorio];
-      resultados[i] = imagens[aleatorio];
+      resultados[i] = imagens[selecionarImagemComPeso()];
     }
 
     const linhasVencedoras = [
@@ -90,68 +104,36 @@ function multiplicador() {
       [0, 4, 8], [2, 4, 6]
     ];
 
-    let temVitoria = false;
-    for (const linha of linhasVencedoras) {
-      const [a, b, c] = linha;
-      if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
-        temVitoria = true;
-        break;
-      }
-    }
-
+    const temVitoria = checarVitorias(resultados);
     const deveGanhar = Math.random() < chance;
 
     if (deveGanhar && !temVitoria) {
       forcarVitoria(linhasVencedoras);
     } else if (!deveGanhar && temVitoria) {
-      quebrarVitoria(linhasVencedoras);
+      quebrarVitoriasGarantidas();
     }
   }
 
   function forcarVitoria(linhasVencedoras) {
     const linhaEscolhida = linhasVencedoras[Math.floor(Math.random() * linhasVencedoras.length)];
-    
-    // 20% de chance de ser premium (a003/a007)
-    let idxImagem;
-    if (Math.random() < 0.2) {
-      const indicesPremium = [2, 6];
-      idxImagem = indicesPremium[Math.floor(Math.random() * indicesPremium.length)];
-    } else {
-      const indicesBons = [0, 1, 3, 4, 5, 7, 8];
-      idxImagem = indicesBons[Math.floor(Math.random() * indicesBons.length)];
-    }
-    
+    const isPremium = Math.random() < 0.2;
+    const indicesPossiveis = isPremium ? [2, 6] : [0, 1, 3, 4, 5, 7, 8];
+    const idxImagem = indicesPossiveis[Math.floor(Math.random() * indicesPossiveis.length)];
     const imagemVencedora = imagens[idxImagem];
 
     for (const posicao of linhaEscolhida) {
-      const slotAtual = divImagens.querySelector(`.slot-${posicao + 1}`);
-      slotAtual.src = imagemVencedora;
       resultados[posicao] = imagemVencedora;
     }
   }
 
-  function quebrarVitoria(linhasVencedoras) {
-    const linhasAtuais = [];
-    for (const linha of linhasVencedoras) {
-      const [a, b, c] = linha;
-      if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
-        linhasAtuais.push(linha);
-      }
-    }
-
-    for (const linha of linhasAtuais) {
-      const posicaoParaTrocar = linha[Math.floor(Math.random() * linha.length)];
-      let novaImagem;
-      let tentativas = 0;
-      do {
-        const idx = selecionarImagemComPeso();
-        novaImagem = imagens[idx];
-        tentativas++;
-      } while (tentativas < 20 && novaImagem === resultados[posicaoParaTrocar]);
-      
-      const slotAtual = divImagens.querySelector(`.slot-${posicaoParaTrocar + 1}`);
-      slotAtual.src = novaImagem;
-      resultados[posicaoParaTrocar] = novaImagem;
+  function quebrarVitoriasGarantidas() {
+    let tentativas = 0;
+    while (checarVitorias(resultados) && tentativas < 50) {
+      const posAleatoria = Math.floor(Math.random() * quantidadeDeSlot);
+      const imgAtual = resultados[posAleatoria];
+      const opcoesDiferentes = imagens.filter(img => img !== imgAtual);
+      resultados[posAleatoria] = opcoesDiferentes[Math.floor(Math.random() * opcoesDiferentes.length)];
+      tentativas++;
     }
   }
 
@@ -164,7 +146,7 @@ function multiplicador() {
     let ganhoTotal = 0;
     let ganhou = false;
     const slotsGanhadores = new Set();
-    let imagemVencedora = "";
+    let ultimaImagemVencedora = "";
 
     linhasVencedoras.forEach(linha => {
       const [a, b, c] = linha;
@@ -173,7 +155,7 @@ function multiplicador() {
         const multiplicador = multiplicadores[indiceImagem];
         ganhoTotal += apostaFixa * multiplicador;
         ganhou = true;
-        imagemVencedora = resultados[a];
+        ultimaImagemVencedora = resultados[a];
         linha.forEach(i => slotsGanhadores.add(i));
       }
     });
@@ -184,29 +166,23 @@ function multiplicador() {
       creditosValor += ganhoTotal;
       creditos.value = creditosValor;
       
-      const nomeArquivo = imagemVencedora.split('/').pop();
-      const mult = multiplicadores[imagens.indexOf(imagemVencedora)];
+      const nomeArquivo = ultimaImagemVencedora.split('/').pop();
+      const mult = multiplicadores[imagens.indexOf(ultimaImagemVencedora)];
       
-      if (mult >= 15) {
-        divResultado.textContent = `🔥 JACKPOT! ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
-      } else {
-        divResultado.textContent = `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
-      }
-      divResultado.classList = 'won';
+      divResultado.textContent = mult >= 15 
+        ? `🔥 JACKPOT! ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`
+        : `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
+      
+      divResultado.className = 'won';
       derrotasConsecutivas = 0;
       
-      if (mult >= 15) {
-        mostrarGif("./images/a010.gif");
-      } else if (mult >= 5) {
-        mostrarGif("./images/a011.gif");
-      } else if (mult >= 3) {
-        mostrarGif("./images/b003.gif");
-      } else {
-        mostrarGif("./images/b007.gif");
-      }
+      if (mult >= 15) mostrarGif("./images/a010.gif");
+      else if (mult >= 5) mostrarGif("./images/a011.gif");
+      else if (mult >= 3) mostrarGif("./images/b003.gif");
+      else mostrarGif("./images/b007.gif");
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
-      divResultado.classList = 'lost';
+      divResultado.className = 'lost';
       derrotasConsecutivas++;
       
       if (derrotasConsecutivas >= 10) {
@@ -222,7 +198,8 @@ function multiplicador() {
     localStorage.setItem("derrotas", derrotasConsecutivas);
 
     slotsGanhadores.forEach(i => {
-      document.querySelector(`.slot-${i + 1}`).classList.add("ganhou");
+      const slotElement = divImagens.querySelector(`.slot-${i + 1}`);
+      if (slotElement) slotElement.classList.add("ganhou");
     });
   }
 
@@ -233,10 +210,9 @@ function multiplicador() {
 
 function comprarCreditos() {
   const creditos = document.getElementById("creditos");
-  let valorAtual = parseInt(creditos.value);
+  let valorAtual = parseInt(creditos.value) || 0;
 
-  const confirmar = confirm("💳 Deseja adicionar +100 créditos via Pix?");
-  if (confirmar) {
+  if (confirm("💳 Deseja adicionar +100 créditos via Pix?")) {
     valorAtual += 100;
     creditos.value = valorAtual;
     alert("✅ Créditos adicionados com sucesso!");
