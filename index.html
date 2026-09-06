@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🎰 Slot Anime 🎰</title>
   <link rel="stylesheet" href="index.css">
+  <script src="index.js" defer></script>
 </head>
 <body>
   <div class="container">
@@ -13,22 +14,22 @@
         <h2>🎰 Slot Anime 🎰</h2>
       </div>
 
-      <div id="results">Boa sorte!</div>
+      <div id="results" aria-live="polite">Boa sorte!</div>
 
       <div class="images">
-        <img class="slots slot-1" src="./images/a001.gif" alt="Slot 1" title="Slot 1">
-        <img class="slots slot-2" src="./images/a002.gif" alt="Slot 2" title="Slot 2">
-        <img class="slots slot-3" src="./images/a003.gif" alt="Slot 3" title="Slot 3">
-        <img class="slots slot-4" src="./images/a004.gif" alt="Slot 4" title="Slot 4">
-        <img class="slots slot-5" src="./images/a005.gif" alt="Slot 5" title="Slot 5">
-        <img class="slots slot-6" src="./images/a006.gif" alt="Slot 6" title="Slot 6">
-        <img class="slots slot-7" src="./images/a007.gif" alt="Slot 7" title="Slot 7">
-        <img class="slots slot-8" src="./images/a008.gif" alt="Slot 8" title="Slot 8">
-        <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9" title="Slot 9">
+        <img class="slots slot-1" src="./images/a001.gif" alt="Slot 1">
+        <img class="slots slot-2" src="./images/a002.gif" alt="Slot 2">
+        <img class="slots slot-3" src="./images/a003.gif" alt="Slot 3">
+        <img class="slots slot-4" src="./images/a004.gif" alt="Slot 4">
+        <img class="slots slot-5" src="./images/a005.gif" alt="Slot 5">
+        <img class="slots slot-6" src="./images/a006.gif" alt="Slot 6">
+        <img class="slots slot-7" src="./images/a007.gif" alt="Slot 7">
+        <img class="slots slot-8" src="./images/a008.gif" alt="Slot 8">
+        <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9">
       </div>
 
       <div class="aposta-container">
-        <label>💰 Aposta:</label>
+        <label for="aposta">💰 Aposta:</label>
         <select id="aposta">
           <option value="1">R$ 1</option>
           <option value="5">R$ 5</option>
@@ -39,19 +40,17 @@
       </div>
 
       <div class="credits">
-        <label>Créditos:</label>
-        <input type="number" id="creditos" value="100" readonly>
+        <label for="creditos">Créditos:</label>
+        <input type="number" id="creditos" value="100" readonly tabindex="-1">
       </div>
 
       <div class="buttons">
-        <button id="playButton" onclick="multiplicador()">🎲 Jogar</button>
-        <button id="buyButton" onclick="comprarCreditos()">💳 Comprar Créditos</button>
+        <button id="playButton">🎲 Jogar</button>
+        <button id="buyButton">💳 Comprar Créditos</button>
       </div>
     </div>
   </div>
 
   <div class="gif-container" id="gifContainer"></div>
-
-  <script src="index.js"></script>
 </body>
 </html>
