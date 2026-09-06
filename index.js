@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("playButton").addEventListener("click", multiplicador);
   document.getElementById("buyButton").addEventListener("click", comprarCreditos);
 
-  // Mapeamento de Teclado (Espaço ou Enter para Jogar)
+  // Permite girar usando as teclas Espaço ou Enter
   document.addEventListener("keydown", (event) => {
     if (event.code === "Space" || event.code === "Enter") {
-      event.preventDefault(); // Evita scroll ao apertar espaço
+      event.preventDefault();
       const playBtn = document.getElementById("playButton");
       if (!playBtn.disabled) {
         multiplicador();
@@ -59,12 +59,13 @@ function multiplicador() {
     slot.classList.add("rodando-suave");
   });
 
+  // Troca ultra-rápida (40ms) simulando o movimento do carretel
   const intervaloRodando = setInterval(() => {
     slots.forEach(slot => {
       const aleatorio = selecionarImagemComPeso();
       slot.src = imagens[aleatorio];
     });
-  }, 80);
+  }, 40);
 
   setTimeout(() => {
     clearInterval(intervaloRodando);
