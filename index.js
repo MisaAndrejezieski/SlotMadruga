@@ -39,8 +39,8 @@ function multiplicador() {
     "./images/tristeza_flies.webp"
   ];
 
-  const pesos = [0.4, 0.4, 0.05, 0.45, 0.45, 0.45, 0.05, 0.5, 0.5, 0.02, 0.02];
-  const multiplicadores = [0.5, 0.75, 10, 2, 2.5, 3, 10, 4, 5, 20, 20];
+  const pesos = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.00, 0.0];
+  const multiplicadores = [0.5, 0.75, 10, 2, 2.5, 3, 10, 4, 5, 100, 20];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
