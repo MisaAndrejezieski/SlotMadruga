@@ -213,9 +213,9 @@ function multiplicador() {
         mostrarGif("./images/giphy004.gif");
         derrotasConsecutivas = 0;
       } else if (derrotasConsecutivas >= 5) {
-        mostrarGif("./images/rickdance.webp");
-      } else {
         mostrarGif("./images/tristeza_flies.webp");
+      } else {
+        mostrarGif("./images/travolta.webp");
       }
     }
 
