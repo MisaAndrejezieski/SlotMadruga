@@ -39,7 +39,7 @@ function multiplicador() {
     "./images/tristeza_flies.webp"
   ];
 
-  const pesos = [0.4, 0.4, 0.05, 0.45, 0.45, 0.45, 0.05, 0.5, 0.5, 0.02, 1];
+  const pesos = [0.4, 0.4, 0.05, 0.45, 0.45, 0.45, 0.05, 0.5, 0.5, 0.02, 0.02];
   const multiplicadores = [0.5, 0.75, 10, 2, 2.5, 3, 10, 4, 5, 20, 20];
 
   const divImagens = document.querySelector(".images");
@@ -55,7 +55,7 @@ function multiplicador() {
 
   playBtn.disabled = true;
 
-  // VERIFICAÇÃO DE SALDO INSUFICIENTE (SEM CRÉDITOS OU CRÉDITOS MENORES QUE A APOSTA)
+  // Validação de saldo suficiente
   if (apostaFixa > creditosValor) {
     divResultado.textContent = "❌ Você está sem créditos!";
     divResultado.className = 'lost';
@@ -177,17 +177,31 @@ function multiplicador() {
     const slotsGanhadores = new Set();
     let ultimaImagemVencedora = "";
 
-    linhasVencedoras.forEach(linha => {
-      const [a, b, c] = linha;
-      if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
-        const indiceImagem = imagens.indexOf(resultados[a]);
-        const multiplicador = multiplicadores[indiceImagem];
-        ganhoTotal += apostaFixa * multiplicador;
-        ganhou = true;
-        ultimaImagemVencedora = resultados[a];
-        linha.forEach(i => slotsGanhadores.add(i));
+    // Checa se TODOS os 9 slots pararam na mesma imagem (Tela Cheia)
+    const telaCheia = resultados.every(val => val === resultados[0]);
+
+    if (telaCheia) {
+      // REGRA ESPECIAL: Bônus x1000 se os 9 slots forem idênticos
+      ganhoTotal = apostaFixa * 1000;
+      ganhou = true;
+      ultimaImagemVencedora = resultados[0];
+      for (let i = 0; i < quantidadeDeSlot; i++) {
+        slotsGanhadores.add(i);
       }
-    });
+    } else {
+      // Cálculo padrão por linhas de vitória
+      linhasVencedoras.forEach(linha => {
+        const [a, b, c] = linha;
+        if (resultados[a] === resultados[b] && resultados[a] === resultados[c]) {
+          const indiceImagem = imagens.indexOf(resultados[a]);
+          const multiplicador = multiplicadores[indiceImagem];
+          ganhoTotal += apostaFixa * multiplicador;
+          ganhou = true;
+          ultimaImagemVencedora = resultados[a];
+          linha.forEach(i => slotsGanhadores.add(i));
+        }
+      });
+    }
 
     gifContainer.innerHTML = "";
 
@@ -198,9 +212,13 @@ function multiplicador() {
       const nomeArquivo = ultimaImagemVencedora.split('/').pop();
       const mult = multiplicadores[imagens.indexOf(ultimaImagemVencedora)];
       
-      divResultado.textContent = mult >= 15 
-        ? `🔥 JACKPOT! ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`
-        : `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
+      if (telaCheia) {
+        divResultado.textContent = `🚨 MEGA JACKPOT X1000! Ganhou ${ganhoTotal} créditos!`;
+      } else if (mult >= 15) {
+        divResultado.textContent = `🔥 JACKPOT! ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
+      } else {
+        divResultado.textContent = `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
+      }
       
       divResultado.className = 'won';
       
