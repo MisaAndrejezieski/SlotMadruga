@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎰 Slot Anime 🎰</title>
+  <title>Slot Anime</title>
   <link rel="stylesheet" href="index.css">
-  <script src="index.js" defer></script>
 </head>
 <body>
+
   <div class="container">
     <div class="containerContents">
+      
+      <!-- Cabeçalho -->
       <div class="title">
         <h2>🎰 Slot Anime 🎰</h2>
       </div>
 
-      <div id="results" aria-live="polite">Boa sorte!</div>
+      <!-- Área do Texto de Resultado -->
+      <div id="results">Boa sorte!</div>
 
+      <!-- Grade dos 9 Slots -->
       <div class="images">
         <img class="slots slot-1" src="./images/a001.gif" alt="Slot 1">
         <img class="slots slot-2" src="./images/a002.gif" alt="Slot 2">
@@ -28,10 +32,10 @@
         <img class="slots slot-9" src="./images/a009.gif" alt="Slot 9">
       </div>
 
+      <!-- Controles de Aposta -->
       <div class="aposta-container">
         <label for="aposta">💰 Aposta:</label>
         <select id="aposta">
-          <option value="1">R$ 1</option>
           <option value="5">R$ 5</option>
           <option value="10" selected>R$ 10</option>
           <option value="20">R$ 20</option>
@@ -39,18 +43,24 @@
         </select>
       </div>
 
+      <!-- Créditos do Jogador -->
       <div class="credits">
         <label for="creditos">Créditos:</label>
-        <input type="number" id="creditos" value="100" readonly tabindex="-1">
+        <input type="text" id="creditos" value="100" readonly>
       </div>
 
+      <!-- Botões de Ação -->
       <div class="buttons">
-        <button id="playButton">🎲 Jogar (Espaço)</button>
-        <button id="buyButton">💳 Comprar Créditos</button>
+        <button id="playButton">🎲 Jogar</button>
+        <button id="buyButton">💳 +100 Créditos</button>
       </div>
+
     </div>
   </div>
 
-  <div class="gif-container" id="gifContainer"></div>
+  <!-- Pop-up overlay para GIFs de Vitória, Derrota e Saldo Insuficiente -->
+  <div id="gifContainer" class="gif-container"></div>
+
+  <script src="index.js"></script>
 </body>
 </html>
