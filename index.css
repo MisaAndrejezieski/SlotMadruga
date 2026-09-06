@@ -42,7 +42,7 @@ html, body {
   z-index: 0;
 }
 
-/* Painel semitransparente sem barra de rolagem */
+/* Painel semitransparente ajustado sem barra de rolagem */
 .containerContents {
   position: relative;
   z-index: 1;
@@ -59,7 +59,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden; /* Remove totalmente a barra de rolagem */
+  overflow: hidden; /* Garante que a barra de rolagem cinza não apareça */
 }
 
 .title h2 {
@@ -81,7 +81,7 @@ html, body {
 #results.won { background: var(--cor-vitoria); }
 #results.lost { background: var(--cor-derrota); }
 
-/* Grid ajustado */
+/* Grid dos Slots */
 .images {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -101,7 +101,7 @@ html, body {
   overflow: hidden;
 }
 
-/* Movimento cadenciado do carretel */
+/* Animação do carretel rodando */
 .rodando-suave {
   animation: roletaGirando 0.25s linear infinite;
   filter: blur(0.8px);
@@ -139,6 +139,7 @@ html, body {
   box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
+/* Campos de Entrada */
 .aposta-container, .credits {
   display: flex;
   justify-content: space-between;
@@ -177,7 +178,7 @@ html, body {
   pointer-events: none;
 }
 
-/* Botões ajustados */
+/* Botões */
 .buttons {
   display: flex;
   justify-content: center;
@@ -207,7 +208,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* GIF de Feedback Grande e Centralizado */
+/* Overlay do GIF de Feedback */
 .gif-container {
   position: fixed;
   inset: 0;
