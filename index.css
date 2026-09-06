@@ -42,52 +42,57 @@ html, body {
   z-index: 0;
 }
 
-/* Painel semitransparente ajustável à tela */
+/* Painel semitransparente compactado para não cortar botões */
 .containerContents {
   position: relative;
   z-index: 1;
-  background: rgba(8, 8, 8, 0.45);
+  background: rgba(8, 8, 8, 0.55);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-  width: min(92vw, 400px);
-  max-height: 95vh;
-  padding: clamp(12px, 3vh, 25px);
+  width: min(92vw, 380px);
+  max-height: 96vh;
+  padding: clamp(10px, 2vh, 18px);
   border-radius: 20px;
   text-align: center;
   box-shadow: 0 8px 32px rgba(0,0,0,0.6);
   border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto; /* Rolagem de segurança para telas pequenas */
 }
 
 .title h2 {
-  margin: 0 0 10px 0;
-  font-size: clamp(1.4rem, 4vw, 2rem);
+  margin: 0 0 6px 0;
+  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
   color: var(--cor-destaque);
   text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
 #results {
-  margin: 10px 0;
-  padding: 8px;
-  border-radius: 10px;
+  margin: 4px 0 8px 0;
+  padding: 6px;
+  border-radius: 8px;
   background: rgba(0,0,0,0.5);
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
   font-weight: bold;
 }
 
 #results.won { background: var(--cor-vitoria); }
 #results.lost { background: var(--cor-derrota); }
 
+/* Grid ajustado com margens enxutas */
 .images {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin: 12px 0;
+  gap: 6px;
+  margin: 6px 0;
 }
 
 .slots {
   width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 2px solid var(--cor-destaque);
   background: rgba(0,0,0,0.3);
   object-fit: cover;
@@ -96,7 +101,7 @@ html, body {
   overflow: hidden;
 }
 
-/* Movimento suave do carretel */
+/* Movimento cadenciado do carretel */
 .rodando-suave {
   animation: roletaGirando 0.25s linear infinite;
   filter: blur(0.8px);
@@ -134,14 +139,60 @@ html, body {
   box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
+.aposta-container, .credits {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
+.aposta-container label, .credits label {
+  color: var(--cor-destaque);
+  font-weight: bold;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+}
+
+.aposta-container select, .credits input {
+  background: rgba(255,255,255,0.15);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-destaque);
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  font-weight: bold;
+}
+
+.aposta-container select option {
+  background: #1a1a1a;
+}
+
+.credits input {
+  width: 80px;
+  text-align: right;
+  border: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Botões visíveis e destacados no rodapé do painel */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 button {
-  padding: 10px 20px;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  padding: 8px 14px;
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
   font-weight: bold;
   background: var(--cor-destaque);
   color: #1a1a1a;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: transform 0.2s, opacity 0.2s;
 }
@@ -154,51 +205,6 @@ button:hover:not(:disabled) {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.aposta-container, .credits {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(0,0,0,0.4);
-  padding: 8px 12px;
-  border-radius: 10px;
-  margin: 6px 0;
-}
-
-.aposta-container label, .credits label {
-  color: var(--cor-destaque);
-  font-weight: bold;
-  font-size: clamp(0.85rem, 2.2vw, 1rem);
-}
-
-.aposta-container select, .credits input {
-  background: rgba(255,255,255,0.15);
-  color: var(--cor-texto);
-  border: 1px solid var(--cor-destaque);
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: clamp(0.85rem, 2.2vw, 1rem);
-  font-weight: bold;
-}
-
-.aposta-container select option {
-  background: #1a1a1a;
-}
-
-.credits input {
-  width: 90px;
-  text-align: right;
-  border: none;
-  background: transparent;
-  pointer-events: none;
 }
 
 /* GIF de Feedback Grande e Centralizado */
