@@ -1,6 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("playButton").addEventListener("click", multiplicador);
   document.getElementById("buyButton").addEventListener("click", comprarCreditos);
+
+  // Mapeamento de Teclado (Espaço ou Enter para Jogar)
+  document.addEventListener("keydown", (event) => {
+    if (event.code === "Space" || event.code === "Enter") {
+      event.preventDefault(); // Evita scroll ao apertar espaço
+      const playBtn = document.getElementById("playButton");
+      if (!playBtn.disabled) {
+        multiplicador();
+      }
+    }
+  });
 });
 
 function multiplicador() {
@@ -27,7 +38,6 @@ function multiplicador() {
   let apostaFixa = parseInt(apostaInput.value) || 10;
   let resultados = new Array(quantidadeDeSlot);
 
-  // Desabilita o botão para evitar múltiplos cliques na mesma rodada
   playBtn.disabled = true;
 
   if (apostaFixa > creditosValor) {
@@ -60,7 +70,6 @@ function multiplicador() {
     clearInterval(intervaloRodando);
     slots.forEach(slot => slot.classList.remove("rodando-suave"));
 
-    // Define os resultados e atualiza a interface
     definirResultadosComChance(0.25);
 
     slots.forEach((slot, index) => {
@@ -70,7 +79,7 @@ function multiplicador() {
     });
 
     verifiqueSeGanhou();
-    playBtn.disabled = false; // Reabilita o botão ao final
+    playBtn.disabled = false;
   }, 2500);
 
   function selecionarImagemComPeso() {
@@ -204,7 +213,7 @@ function multiplicador() {
   }
 
   function mostrarGif(caminho) {
-    gifContainer.innerHTML = `<img src="${caminho}" class="gif-feedback" alt="Resultado" title="Resultado">`;
+    gifContainer.innerHTML = `<img src="${caminho}" class="gif-feedback" alt="Resultado">`;
   }
 }
 
