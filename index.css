@@ -30,7 +30,7 @@ html, body {
   position: relative;
 }
 
-/* GIF de fundo bem visível */
+/* GIF de fundo alice-hana visível */
 .container::before {
   content: "";
   position: absolute;
@@ -96,23 +96,23 @@ html, body {
   overflow: hidden;
 }
 
-/* Efeito de tambor/carretel girando em movimento contínuo */
+/* Movimento suave do carretel */
 .rodando-suave {
-  animation: roletaGirando 0.12s linear infinite;
-  filter: blur(1.5px);
+  animation: roletaGirando 0.25s linear infinite;
+  filter: blur(0.8px);
 }
 
 @keyframes roletaGirando {
   0% {
-    transform: translateY(-20%);
-    opacity: 0.8;
+    transform: translateY(-10%);
+    opacity: 0.9;
   }
   50% {
     opacity: 1;
   }
   100% {
-    transform: translateY(20%);
-    opacity: 0.8;
+    transform: translateY(10%);
+    opacity: 0.9;
   }
 }
 
