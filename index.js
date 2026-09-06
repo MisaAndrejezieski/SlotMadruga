@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function multiplicador() {
   const quantidadeDeSlot = 9;
 
-  // 11 Imagens ativas nos Slots (a001 a a011)
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
     "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
@@ -24,7 +23,6 @@ function multiplicador() {
     "./images/a010.gif", "./images/a011.gif"
   ];
 
-  // Mapeamento exato dos arquivos da sua pasta
   const gifsAlegres = [
     "./images/alegre_b003.gif",
     "./images/alegre_b007.gif",
@@ -41,7 +39,6 @@ function multiplicador() {
     "./images/tristeza_flies.webp"
   ];
 
-  // Pesos e multiplicadores ajustados para os 11 símbolos
   const pesos = [0.4, 0.4, 0.05, 0.45, 0.45, 0.45, 0.05, 0.5, 0.5, 0.02, 0.02];
   const multiplicadores = [0.5, 0.75, 10, 2, 2.5, 3, 10, 4, 5, 20, 20];
 
@@ -58,9 +55,14 @@ function multiplicador() {
 
   playBtn.disabled = true;
 
+  // VERIFICAÇÃO DE FALTAS DE CRÉDITO COM GIF E MENSAGEM
   if (apostaFixa > creditosValor) {
-    divResultado.textContent = "Créditos insuficientes!";
+    divResultado.textContent = "❌ Você está sem créditos!";
     divResultado.className = 'lost';
+    
+    gifContainer.innerHTML = "";
+    mostrarGif("./images/triste_giphy004.gif");
+    
     playBtn.disabled = false;
     return;
   }
@@ -77,7 +79,6 @@ function multiplicador() {
     slot.classList.add("rodando-suave");
   });
 
-  // Girocadenciado a 90ms
   const intervaloRodando = setInterval(() => {
     slots.forEach(slot => {
       const aleatorio = selecionarImagemComPeso();
@@ -203,14 +204,12 @@ function multiplicador() {
       
       divResultado.className = 'won';
       
-      // Sortear GIF Alegre
       const gifAlegre = gifsAlegres[Math.floor(Math.random() * gifsAlegres.length)];
       mostrarGif(gifAlegre);
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.className = 'lost';
       
-      // Sortear GIF Triste
       const gifTriste = gifsTristes[Math.floor(Math.random() * gifsTristes.length)];
       mostrarGif(gifTriste);
     }
