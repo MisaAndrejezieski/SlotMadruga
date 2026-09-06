@@ -7,11 +7,38 @@ function multiplicador() {
     "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
   ];
 
-  // Pesos: imagens boas são EXTREMAMENTE raras
-  const pesos = [0.4, 0.4, 0.01, 0.45, 0.45, 0.45, 0.01, 0.5, 0.5, 0.6];
-  
-  // Multiplicadores: quando paga, paga bem
-  const multiplicadores = [0.5, 0.75, 20, 2, 2.5, 3, 20, 4, 5, 1];
+  // ========================================
+  // CHANCE DE CADA IMAGEM APARECER (0 = nunca, 1 = sempre)
+  // Quanto MENOR a chance, MAIS ela paga
+  // ========================================
+  const pesos = [
+    0.25, // a001.gif - MUITO COMUM (paga 0.5x)
+    0.25, // a002.gif - MUITO COMUM (paga 0.75x)
+    0.01, // a003.gif - MUITO RARO (paga 20x) ⭐
+    0.15, // a004.gif - COMUM (paga 2x)
+    0.15, // a005.gif - COMUM (paga 2.5x)
+    0.15, // a006.gif - COMUM (paga 3x)
+    0.01, // a007.gif - MUITO RARO (paga 20x) ⭐
+    0.12, // a008.gif - MÉDIO (paga 4x)
+    0.10, // a009.gif - MÉDIO (paga 5x)
+    0.07  // stella-cute.gif - MÉDIO (paga 1x)
+  ];
+
+  // ========================================
+  // MULTIPLICADORES (quanto MENOS chance, MAIS paga)
+  // ========================================
+  const multiplicadores = [
+    0.5,  // a001.gif - COMUM (paga pouco)
+    0.75, // a002.gif - COMUM (paga pouco)
+    20,   // a003.gif - RARO (paga MUITO) ⭐
+    2,    // a004.gif - COMUM (paga médio)
+    2.5,  // a005.gif - COMUM (paga médio)
+    3,    // a006.gif - COMUM (paga médio)
+    20,   // a007.gif - RARO (paga MUITO) ⭐
+    4,    // a008.gif - MÉDIO (paga médio)
+    5,    // a009.gif - MÉDIO (paga médio)
+    1     // stella-cute.gif - MÉDIO (paga pouco)
+  ];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
@@ -61,7 +88,7 @@ function multiplicador() {
       }, 300);
     });
 
-    // CHANCE BAIXA: 25%
+    // CHANCE DE VITÓRIA: 25% (o jogador ganha 1 a cada 4 rodadas)
     definirResultadosComChance(0.25);
     verifiqueSeGanhou();
   }, 2500);
@@ -111,14 +138,15 @@ function multiplicador() {
   function forcarVitoria(linhasVencedoras) {
     const linhaEscolhida = linhasVencedoras[Math.floor(Math.random() * linhasVencedoras.length)];
     
-    // 20% de chance de ser premium (a003/a007)
+    // 10% de chance de ser premium (a003/a007)
     let idxImagem;
-    if (Math.random() < 0.2) {
+    if (Math.random() < 0.1) {
       const indicesPremium = [2, 6];
       idxImagem = indicesPremium[Math.floor(Math.random() * indicesPremium.length)];
     } else {
-      const indicesBons = [0, 1, 3, 4, 5, 7, 8];
-      idxImagem = indicesBons[Math.floor(Math.random() * indicesBons.length)];
+      // Escolhe entre as imagens mais comuns (que pagam pouco)
+      const indicesComuns = [0, 1, 3, 4, 5, 7, 8, 9];
+      idxImagem = indicesComuns[Math.floor(Math.random() * indicesComuns.length)];
     }
     
     const imagemVencedora = imagens[idxImagem];
@@ -165,6 +193,7 @@ function multiplicador() {
     let ganhou = false;
     const slotsGanhadores = new Set();
     let imagemVencedora = "";
+    let multiplicadorUsado = 0;
 
     linhasVencedoras.forEach(linha => {
       const [a, b, c] = linha;
@@ -174,6 +203,7 @@ function multiplicador() {
         ganhoTotal += apostaFixa * multiplicador;
         ganhou = true;
         imagemVencedora = resultados[a];
+        multiplicadorUsado = multiplicador;
         linha.forEach(i => slotsGanhadores.add(i));
       }
     });
@@ -185,21 +215,22 @@ function multiplicador() {
       creditos.value = creditosValor;
       
       const nomeArquivo = imagemVencedora.split('/').pop();
-      const mult = multiplicadores[imagens.indexOf(imagemVencedora)];
       
-      if (mult >= 15) {
-        divResultado.textContent = `🔥 JACKPOT! ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
+      if (multiplicadorUsado >= 15) {
+        divResultado.textContent = `🔥 JACKPOT! ${ganhoTotal} créditos! (${nomeArquivo} x${multiplicadorUsado})`;
+      } else if (multiplicadorUsado >= 5) {
+        divResultado.textContent = `🎉 Grande vitória! ${ganhoTotal} créditos! (${nomeArquivo} x${multiplicadorUsado})`;
       } else {
-        divResultado.textContent = `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
+        divResultado.textContent = `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${multiplicadorUsado})`;
       }
       divResultado.classList = 'won';
       derrotasConsecutivas = 0;
       
-      if (mult >= 15) {
+      if (multiplicadorUsado >= 15) {
         mostrarGif("./images/a010.gif");
-      } else if (mult >= 5) {
+      } else if (multiplicadorUsado >= 5) {
         mostrarGif("./images/a011.gif");
-      } else if (mult >= 3) {
+      } else if (multiplicadorUsado >= 3) {
         mostrarGif("./images/b003.gif");
       } else {
         mostrarGif("./images/b007.gif");
@@ -213,9 +244,9 @@ function multiplicador() {
         mostrarGif("./images/giphy004.gif");
         derrotasConsecutivas = 0;
       } else if (derrotasConsecutivas >= 5) {
-        mostrarGif("./images/tristeza_flies.webp");
+        mostrarGif("./images/giphy001.gif");
       } else {
-        mostrarGif("./images/travolta.webp");
+        mostrarGif("./images/alice-hana.gif");
       }
     }
 
