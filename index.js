@@ -55,7 +55,7 @@ function multiplicador() {
 
   playBtn.disabled = true;
 
-  // VERIFICAÇÃO DE FALTAS DE CRÉDITO COM GIF E MENSAGEM
+  // VERIFICAÇÃO DE SALDO INSUFICIENTE (SEM CRÉDITOS OU CRÉDITOS MENORES QUE A APOSTA)
   if (apostaFixa > creditosValor) {
     divResultado.textContent = "❌ Você está sem créditos!";
     divResultado.className = 'lost';
