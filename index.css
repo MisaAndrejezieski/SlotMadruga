@@ -59,7 +59,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow-y: auto; /* Rolagem de segurança para telas pequenas */
+  overflow-y: auto; /* Rolagem de segurança caso a tela seja curta */
 }
 
 .title h2 {
