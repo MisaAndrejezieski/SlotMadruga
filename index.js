@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("playButton").addEventListener("click", multiplicador);
   document.getElementById("buyButton").addEventListener("click", comprarCreditos);
 
-  // Permite girar usando as teclas Espaço ou Enter
   document.addEventListener("keydown", (event) => {
     if (event.code === "Space" || event.code === "Enter") {
       event.preventDefault();
@@ -17,14 +16,34 @@ document.addEventListener("DOMContentLoaded", () => {
 function multiplicador() {
   const quantidadeDeSlot = 9;
 
+  // 11 Imagens ativas nos Slots (a001 a a011)
   const imagens = [
     "./images/a001.gif", "./images/a002.gif", "./images/a003.gif",
     "./images/a004.gif", "./images/a005.gif", "./images/a006.gif",
-    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif", "./images/stella-cute.gif"
+    "./images/a007.gif", "./images/a008.gif", "./images/a009.gif",
+    "./images/a010.gif", "./images/a011.gif"
   ];
 
-  const pesos = [0.4, 0.4, 0.01, 0.45, 0.45, 0.45, 0.01, 0.5, 0.5, 0.6];
-  const multiplicadores = [0.5, 0.75, 20, 2, 2.5, 3, 20, 4, 5, 1];
+  // Mapeamento exato dos arquivos da sua pasta
+  const gifsAlegres = [
+    "./images/alegre_b003.gif",
+    "./images/alegre_b007.gif",
+    "./images/alegre_carlton.webp",
+    "./images/alegre_rickdance.webp",
+    "./images/alegre_snoopdpg.webp",
+    "./images/alegre_stella-cute.gif",
+    "./images/alegre_travolta002.webp"
+  ];
+
+  const gifsTristes = [
+    "./images/triste_giphy004.gif",
+    "./images/triste_travolta.webp",
+    "./images/tristeza_flies.webp"
+  ];
+
+  // Pesos e multiplicadores ajustados para os 11 símbolos
+  const pesos = [0.4, 0.4, 0.05, 0.45, 0.45, 0.45, 0.05, 0.5, 0.5, 0.02, 0.02];
+  const multiplicadores = [0.5, 0.75, 10, 2, 2.5, 3, 10, 4, 5, 20, 20];
 
   const divImagens = document.querySelector(".images");
   const divResultado = document.getElementById("results");
@@ -34,7 +53,6 @@ function multiplicador() {
   const playBtn = document.getElementById("playButton");
 
   let creditosValor = parseInt(creditos.value) || 0;
-  let derrotasConsecutivas = parseInt(localStorage.getItem("derrotas") || "0");
   let apostaFixa = parseInt(apostaInput.value) || 10;
   let resultados = new Array(quantidadeDeSlot);
 
@@ -59,13 +77,13 @@ function multiplicador() {
     slot.classList.add("rodando-suave");
   });
 
-  // Troca ultra-rápida (40ms) simulando o movimento do carretel
+  // Girocadenciado a 90ms
   const intervaloRodando = setInterval(() => {
     slots.forEach(slot => {
       const aleatorio = selecionarImagemComPeso();
       slot.src = imagens[aleatorio];
     });
-  }, 40);
+  }, 90);
 
   setTimeout(() => {
     clearInterval(intervaloRodando);
@@ -127,7 +145,7 @@ function multiplicador() {
   function forcarVitoria(linhasVencedoras) {
     const linhaEscolhida = linhasVencedoras[Math.floor(Math.random() * linhasVencedoras.length)];
     const isPremium = Math.random() < 0.2;
-    const indicesPossiveis = isPremium ? [2, 6] : [0, 1, 3, 4, 5, 7, 8];
+    const indicesPossiveis = isPremium ? [9, 10] : [0, 1, 3, 4, 5, 7, 8];
     const idxImagem = indicesPossiveis[Math.floor(Math.random() * indicesPossiveis.length)];
     const imagemVencedora = imagens[idxImagem];
 
@@ -184,28 +202,18 @@ function multiplicador() {
         : `🎉 Ganhou ${ganhoTotal} créditos! (${nomeArquivo} x${mult})`;
       
       divResultado.className = 'won';
-      derrotasConsecutivas = 0;
       
-      if (mult >= 15) mostrarGif("./images/a010.gif");
-      else if (mult >= 5) mostrarGif("./images/a011.gif");
-      else if (mult >= 3) mostrarGif("./images/b003.gif");
-      else mostrarGif("./images/b007.gif");
+      // Sortear GIF Alegre
+      const gifAlegre = gifsAlegres[Math.floor(Math.random() * gifsAlegres.length)];
+      mostrarGif(gifAlegre);
     } else {
       divResultado.textContent = "Mais sorte na próxima vez!";
       divResultado.className = 'lost';
-      derrotasConsecutivas++;
       
-      if (derrotasConsecutivas >= 10) {
-        mostrarGif("./images/giphy004.gif");
-        derrotasConsecutivas = 0;
-      } else if (derrotasConsecutivas >= 5) {
-        mostrarGif("./images/tristeza_flies.webp");
-      } else {
-        mostrarGif("./images/travolta.webp");
-      }
+      // Sortear GIF Triste
+      const gifTriste = gifsTristes[Math.floor(Math.random() * gifsTristes.length)];
+      mostrarGif(gifTriste);
     }
-
-    localStorage.setItem("derrotas", derrotasConsecutivas);
 
     slotsGanhadores.forEach(i => {
       const slotElement = divImagens.querySelector(`.slot-${i + 1}`);
