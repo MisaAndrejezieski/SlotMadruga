@@ -30,7 +30,6 @@ html, body {
   position: relative;
 }
 
-/* GIF de fundo alice-hana visível */
 .container::before {
   content: "";
   position: absolute;
@@ -42,7 +41,6 @@ html, body {
   z-index: 0;
 }
 
-/* Painel semitransparente ajustado sem barra de rolagem */
 .containerContents {
   position: relative;
   z-index: 1;
@@ -59,7 +57,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden; /* Garante que a barra de rolagem cinza não apareça */
+  overflow: hidden;
 }
 
 .title h2 {
@@ -81,7 +79,6 @@ html, body {
 #results.won { background: var(--cor-vitoria); }
 #results.lost { background: var(--cor-derrota); }
 
-/* Grid dos Slots */
 .images {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -101,24 +98,15 @@ html, body {
   overflow: hidden;
 }
 
-/* Animação do carretel rodando */
 .rodando-suave {
   animation: roletaGirando 0.25s linear infinite;
   filter: blur(0.8px);
 }
 
 @keyframes roletaGirando {
-  0% {
-    transform: translateY(-10%);
-    opacity: 0.9;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(10%);
-    opacity: 0.9;
-  }
+  0% { transform: translateY(-10%); opacity: 0.9; }
+  50% { opacity: 1; }
+  100% { transform: translateY(10%); opacity: 0.9; }
 }
 
 .parando {
@@ -139,7 +127,6 @@ html, body {
   box-shadow: 0 0 15px var(--cor-vitoria);
 }
 
-/* Campos de Entrada */
 .aposta-container, .credits {
   display: flex;
   justify-content: space-between;
@@ -178,7 +165,6 @@ html, body {
   pointer-events: none;
 }
 
-/* Botões */
 .buttons {
   display: flex;
   justify-content: center;
@@ -208,7 +194,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Overlay do GIF de Feedback */
 .gif-container {
   position: fixed;
   inset: 0;
